@@ -10,8 +10,10 @@ import type { ImpactStat, Project, Achievement } from '@/lib/types';
 
 type HomeProgram = { title: string; text: string; img?: string; image?: string; imageKey?: 'heroImage' | 'coralImage' | 'sweepImage' };
 
+const HOME_HERO_IMAGE = '/images/hinnavaru-hero.jpg';
+
 const HOME_DEFAULTS = {
-  heroImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965093187_81f9d5dc.jpg',
+  heroImage: HOME_HERO_IMAGE,
   coralImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965190451_e8d79013.png',
   sweepImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965170244_a1644cb0.png',
   location: 'Lh. Hinnavaru, Maldives',
@@ -64,9 +66,9 @@ export default function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative h-[88vh] min-h-[560px] flex items-center overflow-hidden">
-        <img src={home.heroImage} alt="Maldives reef" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#003A70]/90 via-[#0066B3]/70 to-[#00B7E5]/40" />
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+        <img src={HOME_HERO_IMAGE} alt="Hinnavaru reef and island coastline" className="absolute inset-0 h-full w-full object-cover object-center" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#001B3A]/95 via-[#003A70]/85 to-[#0066B3]/65" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-white text-sm backdrop-blur">

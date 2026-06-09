@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { MapPin, Mail, Phone, CheckCircle, Users, Handshake } from 'lucide-react';
+import { MapPin, Mail, Phone, CheckCircle, Users, MessageCircle, Calendar } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
-import { CONTACT, CRM_SUBSCRIBE, BOOKING_URL } from '@/lib/constants';
+import { CONTACT, CRM_SUBSCRIBE } from '@/lib/constants';
 import { fetchSiteContent, getSiteObject } from '@/lib/siteContent';
 
 const CONTACT_DEFAULTS = {
@@ -11,10 +11,10 @@ const CONTACT_DEFAULTS = {
   heroImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965170244_a1644cb0.png',
   introTitle: 'Get in touch',
   introText: "We'd love to hear from you — whether you want to volunteer, partner, donate or just learn more about our work.",
-  volunteerTitle: 'Volunteer with us',
-  volunteerText: 'Join our cleanups and restoration dives.',
-  partnerTitle: 'Partner with us',
-  partnerText: 'Resorts, councils and NGOs welcome.',
+  volunteerTitle: 'Volunteer With Us',
+  volunteerText: 'Join our cleanups, reef care activities, and community restoration work.',
+  partnerTitle: 'Schedule a Call',
+  partnerText: 'Speak directly with our team to learn about coral restoration, partnerships, volunteering opportunities, and adopting a coral frame.',
 };
 
 export default function Contact() {
@@ -26,8 +26,15 @@ export default function Contact() {
     fetchSiteContent(['contact_page', 'contact_details']).then(setContent);
   }, []);
 
-  const page = getSiteObject(content, 'contact_page', CONTACT_DEFAULTS);
-  const contactDetails = getSiteObject(content, 'contact_details', CONTACT);
+  const pageContent = getSiteObject(content, 'contact_page', CONTACT_DEFAULTS);
+  const page = {
+    ...pageContent,
+    volunteerTitle: CONTACT_DEFAULTS.volunteerTitle,
+    volunteerText: CONTACT_DEFAULTS.volunteerText,
+    partnerTitle: CONTACT_DEFAULTS.partnerTitle,
+    partnerText: CONTACT_DEFAULTS.partnerText,
+  };
+  const contactDetails = { ...getSiteObject(content, 'contact_details', CONTACT), ...CONTACT };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,31 +68,49 @@ export default function Contact() {
           <p className="mt-3 text-slate-600">{page.introText}</p>
 
           <div className="mt-8 space-y-4">
-            {[
-              { icon: MapPin, label: contactDetails.address },
-              { icon: Mail, label: contactDetails.email },
-              { icon: Phone, label: contactDetails.phone },
-            ].map((c, i) => (
-              <div key={i} className="flex items-center gap-3 text-slate-700">
-                <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><c.icon className="h-5 w-5" /></div>
-                {c.label}
-              </div>
-            ))}
+            <div className="flex items-center gap-3 text-slate-700">
+              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><Users className="h-5 w-5" /></div>
+              <span>Contact Person: {contactDetails.person}</span>
+            </div>
+            <div className="flex items-center gap-3 text-slate-700">
+              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><MapPin className="h-5 w-5" /></div>
+              <span>{contactDetails.address}</span>
+            </div>
+            <div className="flex items-center gap-3 text-slate-700">
+              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><Phone className="h-5 w-5" /></div>
+              <a href={contactDetails.phoneHref} className="font-semibold text-[#0066B3] hover:text-[#003A70]">{contactDetails.phone}</a>
+            </div>
+            <div className="flex items-center gap-3 text-slate-700">
+              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><Mail className="h-5 w-5" /></div>
+              <span>{contactDetails.email}</span>
+            </div>
+            <a
+              href={contactDetails.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4E9B47] text-white text-sm font-semibold hover:opacity-90 transition"
+            >
+              <MessageCircle className="h-4 w-4" /> WhatsApp Neeth
+            </a>
           </div>
 
           <div className="mt-8 grid sm:grid-cols-2 gap-4">
-            <div className="rounded-2xl p-5 bg-gradient-to-br from-[#0066B3] to-[#00B7E5] text-white">
+            <section className="rounded-2xl p-5 bg-gradient-to-br from-[#0066B3] to-[#00B7E5] text-white">
               <Users className="h-6 w-6 text-[#68E0D6]" />
               <h3 className="mt-3 font-poppins font-bold">{page.volunteerTitle}</h3>
               <p className="mt-1 text-sm text-sky-100">{page.volunteerText}</p>
-              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-semibold underline">Book a call</a>
-            </div>
-            <div className="rounded-2xl p-5 bg-gradient-to-br from-[#003A70] to-[#0066B3] text-white">
-              <Handshake className="h-6 w-6 text-[#68E0D6]" />
+              <a href={contactDetails.whatsapp} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold underline">
+                <MessageCircle className="h-4 w-4" /> Volunteer With Us
+              </a>
+            </section>
+            <section className="rounded-2xl p-5 bg-gradient-to-br from-[#003A70] to-[#0066B3] text-white">
+              <Calendar className="h-6 w-6 text-[#68E0D6]" />
               <h3 className="mt-3 font-poppins font-bold">{page.partnerTitle}</h3>
               <p className="mt-1 text-sm text-sky-100">{page.partnerText}</p>
-              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-semibold underline">Schedule a meeting</a>
-            </div>
+              <a href={contactDetails.whatsapp} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold underline">
+                <MessageCircle className="h-4 w-4" /> Schedule a Call
+              </a>
+            </section>
           </div>
         </div>
 

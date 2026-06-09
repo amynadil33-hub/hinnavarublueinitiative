@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Mail, MapPin, Phone } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Mail, MapPin, Phone, Users, MessageCircle } from 'lucide-react';
 import { CONTACT, CRM_SUBSCRIBE, LOGO_URL } from '@/lib/constants';
 import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
 
@@ -22,7 +22,7 @@ export function Footer() {
     description: 'A community-led environmental NGO restoring reefs and protecting the marine ecosystems of Lh. Hinnavaru, Maldives.',
     copyright: "Protecting Hinnavaru's blue future.",
   });
-  const contactDetails = getSiteObject(content, 'contact_details', CONTACT);
+  const contactDetails = { ...getSiteObject(content, 'contact_details', CONTACT), ...CONTACT };
   const settings = getSiteObject(content, 'site_settings', { logoUrl: LOGO_URL, siteName: 'Hinnavaru Blue' });
   const navItems = getSiteArray<FooterNavItem>(content, 'navigation', [
     { to: '/our-roots', label: 'Our Roots' },
@@ -92,9 +92,15 @@ export function Footer() {
         <div>
           <h4 className="font-poppins font-semibold text-white mb-4">Contact</h4>
           <ul className="space-y-3 text-sm text-sky-200/90">
+            <li className="flex gap-2"><Users className="h-4 w-4 mt-0.5 text-[#68E0D6]" />Contact Person: {contactDetails.person}</li>
             <li className="flex gap-2"><MapPin className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{contactDetails.address}</li>
             <li className="flex gap-2"><Mail className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{contactDetails.email}</li>
-            <li className="flex gap-2"><Phone className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{contactDetails.phone}</li>
+            <li className="flex gap-2"><Phone className="h-4 w-4 mt-0.5 text-[#68E0D6]" /><a href={contactDetails.phoneHref} className="hover:text-[#68E0D6]">{contactDetails.phone}</a></li>
+            <li>
+              <a href={contactDetails.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[#68E0D6] hover:text-white">
+                <MessageCircle className="h-4 w-4" /> WhatsApp Neeth
+              </a>
+            </li>
           </ul>
         </div>
 
