@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { LOGO_URL } from '@/lib/constants';
 import { LogOut, Trash2, Plus, Eye, EyeOff } from 'lucide-react';
+import type { Session } from '@supabase/supabase-js';
 
 const TABS = [
   { key: 'projects', label: 'Projects' },
@@ -10,7 +11,10 @@ const TABS = [
   { key: 'frame_progress', label: 'Frame Progress' },
   { key: 'adoption_requests', label: 'Adoption Requests' },
   { key: 'contact_messages', label: 'Messages' },
+  { key: 'site_content', label: 'Site Content' },
 ];
+
+type AdminRow = Record<string, string | number | boolean | null | undefined>;
 
 const FIELDS: Record<string, { key: string; label: string; type?: string }[]> = {
   projects: [
@@ -31,13 +35,16 @@ const FIELDS: Record<string, { key: string; label: string; type?: string }[]> = 
   frame_progress: [
     { key: 'frame_id', label: 'Frame ID' }, { key: 'note', label: 'Note', type: 'textarea' }, { key: 'photo', label: 'Photo URL' }, { key: 'progress_date', label: 'Date', type: 'date' },
   ],
+  site_content: [
+    { key: 'key', label: 'Key' }, { key: 'title', label: 'Title' }, { key: 'content', label: 'Content / JSON', type: 'textarea' },
+  ],
 };
 
 export default function Admin() {
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [tab, setTab] = useState('projects');
-  const [rows, setRows] = useState<any[]>([]);
-  const [editing, setEditing] = useState<any>(null);
+  const [rows, setRows] = useState<AdminRow[]>([]);
+  const [editing, setEditing] = useState<AdminRow | null>(null);
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [err, setErr] = useState('');
@@ -48,12 +55,14 @@ export default function Admin() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  useEffect(() => { if (session) load(); }, [tab, session]);
+  const load = useCallback(async () => {
+    const { data, error } = await supabase.from(tab).select('*').order('created_at', { ascending: false });
+    console.log('Supabase result:', data);
+    console.error('Supabase error:', error);
+    setRows((data || []) as AdminRow[]);
+  }, [tab]);
 
-  const load = async () => {
-    const { data } = await supabase.from(tab).select('*').order('created_at', { ascending: false });
-    setRows(data || []);
-  };
+  useEffect(() => { if (session) load(); }, [load, session]);
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,10 +79,14 @@ export default function Admin() {
     delete payload.created_at; delete payload.updated_at;
     if (payload.donation_amount) payload.donation_amount = Number(payload.donation_amount);
     if (payload.id) {
-      await supabase.from(tab).update(payload).eq('id', payload.id);
+      const { data, error } = await supabase.from(tab).update(payload).eq('id', payload.id).select();
+      console.log('Supabase result:', data);
+      console.error('Supabase error:', error);
     } else {
       delete payload.id;
-      await supabase.from(tab).insert(payload);
+      const { data, error } = await supabase.from(tab).insert(payload).select();
+      console.log('Supabase result:', data);
+      console.error('Supabase error:', error);
     }
     setEditing(null);
     load();
@@ -81,12 +94,16 @@ export default function Admin() {
 
   const del = async (id: string) => {
     if (!confirm('Delete this item?')) return;
-    await supabase.from(tab).delete().eq('id', id);
+    const { data, error } = await supabase.from(tab).delete().eq('id', id).select();
+    console.log('Supabase result:', data);
+    console.error('Supabase error:', error);
     load();
   };
 
-  const togglePublish = async (row: any) => {
-    await supabase.from(tab).update({ published: !row.published }).eq('id', row.id);
+  const togglePublish = async (row: AdminRow) => {
+    const { data, error } = await supabase.from(tab).update({ published: !row.published }).eq('id', row.id).select();
+    console.log('Supabase result:', data);
+    console.error('Supabase error:', error);
     load();
   };
 
