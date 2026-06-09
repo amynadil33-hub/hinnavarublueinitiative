@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { LOGO_URL } from '@/lib/constants';
+import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
 
-const NAV = [
+type NavItem = { to: string; label: string };
+
+const NAV: NavItem[] = [
   { to: '/', label: 'Home' },
   { to: '/our-roots', label: 'Our Roots' },
   { to: '/projects', label: 'Projects' },
@@ -14,21 +17,29 @@ const NAV = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [content, setContent] = useState<Record<string, unknown>>({});
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    fetchSiteContent(['navigation', 'site_settings']).then(setContent);
+  }, []);
+
+  const navItems = getSiteArray<NavItem>(content, 'navigation', NAV);
+  const settings = getSiteObject(content, 'site_settings', { siteName: 'Hinnavaru Blue', siteTagline: 'INITIATIVE' });
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-sky-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2">
-          <img src={LOGO_URL} alt="Hinnavaru Blue Initiative logo" className="h-10 w-10 rounded-full object-cover ring-2 ring-sky-200" />
+          <img src={LOGO_URL} alt="Hinnavaru Blue Initiative logo" className="h-10 w-10 lg:h-12 lg:w-12 object-contain" />
           <div className="leading-tight">
-            <span className="block font-poppins font-bold text-[#003A70] text-sm sm:text-base">Hinnavaru Blue</span>
-            <span className="block text-[10px] sm:text-xs text-sky-600 tracking-wide">INITIATIVE</span>
+            <span className="block font-poppins font-bold text-[#003A70] text-sm sm:text-base">{settings.siteName}</span>
+            <span className="block text-[10px] sm:text-xs text-sky-600 tracking-wide">{settings.siteTagline}</span>
           </div>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
-          {NAV.map((n) => (
+          {navItems.map((n) => (
             <Link
               key={n.to}
               to={n.to}
@@ -54,7 +65,7 @@ export function Navbar() {
 
       {open && (
         <nav className="lg:hidden bg-white border-t border-sky-100 px-4 py-3 space-y-1">
-          {NAV.map((n) => (
+          {navItems.map((n) => (
             <Link
               key={n.to}
               to={n.to}

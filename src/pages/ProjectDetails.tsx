@@ -22,17 +22,23 @@ export default function ProjectDetails() {
   useEffect(() => {
     if (!slug) return;
     window.scrollTo(0, 0);
-    supabase.from('projects').select('*').eq('slug', slug).single().then(({ data }) => {
+    supabase.from('projects').select('*').eq('slug', slug).eq('published', true).single().then(({ data, error }) => {
+      console.log('Supabase result:', data);
+      console.error('Supabase error:', error);
       setProject(data);
       if (data) {
-        supabase.from('projects').select('*').eq('category', data.category).neq('id', data.id).limit(3).then((r) => setRelated(r.data || []));
+        supabase.from('projects').select('*').eq('category', data.category).eq('published', true).neq('id', data.id).limit(3).then(({ data: relatedData, error: relatedError }) => {
+          console.log('Supabase result:', relatedData);
+          console.error('Supabase error:', relatedError);
+          setRelated(relatedData || []);
+        });
       }
     });
   }, [slug]);
 
   if (!project) return <div className="py-32 text-center text-slate-400">Loading...</div>;
 
-  const videos = (project.videos as any[]) || [];
+  const videos = (project.videos as Array<string | { url: string }>) || [];
   const isUrlVideo = (u: string) => /\.(mp4|webm|mov)$/i.test(u);
 
   return (

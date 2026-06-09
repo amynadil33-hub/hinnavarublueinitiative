@@ -7,11 +7,7 @@ export const COLORS = {
   sand: '#F5E7B2',
 };
 
-export const LOGO_URL =
-  'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965295107_808bf69b.jpg';
-
-export const BOOKING_URL =
-  'https://famous.ai/api/crm/6a275e85a0ba2d9edb470fe3/calendar/public?calendarId=939ad958-077f-4bad-812f-1c342e7248c0&view=booking';
+export const LOGO_URL = '/images/logo.png';
 
 export const CRM_SUBSCRIBE =
   'https://famous.ai/api/crm/6a275e85a0ba2d9edb470fe3/subscribe';
@@ -50,7 +46,10 @@ export const STATUS_COLORS: Record<string, string> = {
 
 export const CONTACT = {
   org: 'Hinnavaru Blue Initiative',
-  address: 'Lh. Hinnavaru, Lhaviyani Atoll, Maldives',
+  person: 'Neeth',
+  address: 'Lh. Hinnavaru, Maldives',
   email: 'info@hinnavarublue.org',
-  phone: '+960 700 0000',
+  phone: '+960 7714340',
+  phoneHref: 'tel:+9607714340',
+  whatsapp: 'https://wa.me/9607714340',
 };
