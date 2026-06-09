@@ -25,13 +25,13 @@ export function Navbar() {
   }, []);
 
   const navItems = getSiteArray<NavItem>(content, 'navigation', NAV);
-  const settings = getSiteObject(content, 'site_settings', { logoUrl: LOGO_URL, siteName: 'Hinnavaru Blue', siteTagline: 'INITIATIVE' });
+  const settings = getSiteObject(content, 'site_settings', { siteName: 'Hinnavaru Blue', siteTagline: 'INITIATIVE' });
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-sky-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2">
-          <img src={settings.logoUrl} alt="Hinnavaru Blue Initiative logo" className="h-10 w-10 rounded-full object-cover ring-2 ring-sky-200" />
+          <img src={LOGO_URL} alt="Hinnavaru Blue Initiative logo" className="h-10 w-10 lg:h-12 lg:w-12 object-contain" />
           <div className="leading-tight">
             <span className="block font-poppins font-bold text-[#003A70] text-sm sm:text-base">{settings.siteName}</span>
             <span className="block text-[10px] sm:text-xs text-sky-600 tracking-wide">{settings.siteTagline}</span>

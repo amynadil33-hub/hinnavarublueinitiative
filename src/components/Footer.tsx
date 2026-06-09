@@ -23,7 +23,7 @@ export function Footer() {
     copyright: "Protecting Hinnavaru's blue future.",
   });
   const contactDetails = { ...getSiteObject(content, 'contact_details', CONTACT), ...CONTACT };
-  const settings = getSiteObject(content, 'site_settings', { logoUrl: LOGO_URL, siteName: 'Hinnavaru Blue' });
+  const settings = getSiteObject(content, 'site_settings', { siteName: 'Hinnavaru Blue' });
   const navItems = getSiteArray<FooterNavItem>(content, 'navigation', [
     { to: '/our-roots', label: 'Our Roots' },
     { to: '/projects', label: 'Projects' },
@@ -61,7 +61,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid gap-10 md:grid-cols-4">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <img src={settings.logoUrl} alt="HBI" className="h-10 w-10 rounded-full" />
+            <img src={LOGO_URL} alt="Hinnavaru Blue Initiative logo" className="h-10 w-10 object-contain" />
             <span className="font-poppins font-bold text-white">{settings.siteName}</span>
           </div>
           <p className="text-sm text-sky-200/80 leading-relaxed">

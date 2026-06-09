@@ -111,7 +111,7 @@ export default function Admin() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#003A70] to-[#0066B3] p-4">
         <form onSubmit={login} className="bg-white rounded-3xl p-8 w-full max-w-sm shadow-xl">
-          <img src={LOGO_URL} alt="HBI" className="h-14 w-14 rounded-full mx-auto" />
+          <img src={LOGO_URL} alt="Hinnavaru Blue Initiative logo" className="h-14 w-14 object-contain mx-auto" />
           <h1 className="mt-4 text-center font-poppins font-bold text-xl text-[#003A70]">Admin Dashboard</h1>
           {err && <p className="mt-3 text-sm text-red-500 text-center">{err}</p>}
           <input required type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-f w-full mt-5" />
@@ -130,7 +130,7 @@ export default function Admin() {
     <div className="min-h-screen bg-[#f7fbfe]">
       <header className="bg-[#003A70] text-white px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <img src={LOGO_URL} alt="HBI" className="h-9 w-9 rounded-full" />
+          <img src={LOGO_URL} alt="Hinnavaru Blue Initiative logo" className="h-9 w-9 object-contain" />
           <span className="font-poppins font-bold">HBI Admin</span>
         </div>
         <button onClick={() => supabase.auth.signOut()} className="flex items-center gap-2 text-sm hover:text-[#68E0D6]"><LogOut className="h-4 w-4" /> Sign Out</button>

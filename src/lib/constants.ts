@@ -7,8 +7,7 @@ export const COLORS = {
   sand: '#F5E7B2',
 };
 
-export const LOGO_URL =
-  'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965295107_808bf69b.jpg';
+export const LOGO_URL = '/images/logo.png';
 
 export const CRM_SUBSCRIBE =
   'https://famous.ai/api/crm/6a275e85a0ba2d9edb470fe3/subscribe';
