@@ -13,7 +13,7 @@ export function PageHero({
     <section className="relative">
       <div className="relative h-[42vh] min-h-[300px] flex items-center justify-center overflow-hidden">
         <img
-          src={image || 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965093187_81f9d5dc.jpg'}
+          src={image || '/images/hinnavaru-hero.jpg'}
           alt={title}
           className="absolute inset-0 h-full w-full object-cover"
         />

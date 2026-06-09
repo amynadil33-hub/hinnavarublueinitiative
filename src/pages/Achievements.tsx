@@ -3,21 +3,35 @@ import { Award } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
 import { ACHIEVEMENT_CATEGORIES } from '@/lib/constants';
+import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
 import type { Achievement } from '@/lib/types';
 
 export default function Achievements() {
   const [items, setItems] = useState<Achievement[]>([]);
   const [cat, setCat] = useState('All');
+  const [content, setContent] = useState<Record<string, unknown>>({});
 
   useEffect(() => {
-    supabase.from('achievements').select('*').eq('published', true).order('achievement_date', { ascending: false }).then(({ data }) => setItems(data || []));
+    fetchSiteContent(['achievements_page', 'achievement_categories']).then(setContent);
+    supabase.from('achievements').select('*').eq('published', true).order('achievement_date', { ascending: false }).then(({ data, error }) => {
+      console.log('Supabase result:', data);
+      console.error('Supabase error:', error);
+      setItems(data || []);
+    });
   }, []);
+
+  const page = getSiteObject(content, 'achievements_page', {
+    title: 'Our Achievements',
+    subtitle: "Milestones on our journey to restore Hinnavaru's reefs",
+    heroImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965118488_5a4fb952.jpg',
+  });
+  const categories = getSiteArray<string>(content, 'achievement_categories', ACHIEVEMENT_CATEGORIES);
 
   const filtered = useMemo(() => items.filter((a) => cat === 'All' || a.category === cat), [items, cat]);
 
   return (
     <div>
-      <PageHero title="Our Achievements" subtitle="Milestones on our journey to restore Hinnavaru's reefs" image="https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965118488_5a4fb952.jpg" />
+      <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
@@ -30,7 +44,7 @@ export default function Achievements() {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-10 justify-center">
-          {['All', ...ACHIEVEMENT_CATEGORIES].map((c) => (
+          {['All', ...categories].map((c) => (
             <button
               key={c}
               onClick={() => setCat(c)}

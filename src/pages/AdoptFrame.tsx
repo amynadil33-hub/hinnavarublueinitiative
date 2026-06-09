@@ -4,33 +4,61 @@ import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
 import { FrameCard } from '@/components/FrameCard';
 import { CRM_SUBSCRIBE } from '@/lib/constants';
+import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
 import type { Frame, FrameProgress } from '@/lib/types';
+
+type AdoptStep = { t: string; d: string };
+
+type FrameProgressWithFrame = FrameProgress & { frames?: Frame };
+
+const ADOPT_DEFAULTS = {
+  title: 'Adopt a Coral Frame',
+  subtitle: "Give a reef a future — sponsor a coral frame in Hinnavaru's waters",
+  heroImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965118488_5a4fb952.jpg',
+  steps: [
+    { t: 'Choose a Frame', d: 'Browse our available coral frames and pick one to sponsor.' },
+    { t: 'Make a Donation', d: 'Your donation funds the frame, fragments and ongoing care.' },
+    { t: 'Watch it Grow', d: 'Receive photo updates as your coral flourishes on the reef.' },
+  ],
+};
 
 export default function AdoptFrame() {
   const [frames, setFrames] = useState<Frame[]>([]);
-  const [progress, setProgress] = useState<(FrameProgress & { frame?: Frame })[]>([]);
+  const [progress, setProgress] = useState<FrameProgressWithFrame[]>([]);
   const [selected, setSelected] = useState<Frame | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [content, setContent] = useState<Record<string, unknown>>({});
   const [form, setForm] = useState({
     name: '', email: '', phone: '', country: '', donor_type: 'Individual',
     display_name: '', dedication_message: '', sms_opt_in: true,
   });
 
   useEffect(() => {
+    fetchSiteContent(['adopt_frame_page', 'adopt_frame_steps']).then(setContent);
     load();
     supabase.from('frame_progress').select('*, frames(*)').order('progress_date', { ascending: false }).limit(6)
-      .then(({ data }) => setProgress((data as any) || []));
+      .then(({ data, error }) => {
+        console.log('Supabase result:', data);
+        console.error('Supabase error:', error);
+        setProgress((data as FrameProgressWithFrame[]) || []);
+      });
   }, []);
 
-  const load = () => supabase.from('frames').select('*').order('frame_code').then(({ data }) => setFrames(data || []));
+  const load = () => supabase.from('frames').select('*').order('frame_code').then(({ data, error }) => {
+    console.log('Supabase result:', data);
+    console.error('Supabase error:', error);
+    setFrames(data || []);
+  });
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await supabase.from('adoption_requests').insert({
+    const { data, error } = await supabase.from('adoption_requests').insert({
       name: form.name, email: form.email, phone: form.phone || null, country: form.country,
       donor_type: form.donor_type, frame_id: selected?.id, display_name: form.display_name,
       dedication_message: form.dedication_message,
-    });
+    }).select();
+    console.log('Supabase result:', data);
+    console.error('Supabase error:', error);
     try {
       await fetch(CRM_SUBSCRIBE, {
         method: 'POST',
@@ -40,21 +68,22 @@ export default function AdoptFrame() {
           sms_opt_in: form.sms_opt_in, source: 'adopt-a-frame', tags: ['donor', 'frame-adoption'],
         }),
       });
-    } catch (_) {}
+    } catch (crmError) {
+      console.error('CRM subscribe error:', crmError);
+    }
     setSubmitted(true);
   };
 
+  const page = getSiteObject(content, 'adopt_frame_page', ADOPT_DEFAULTS);
+  const steps = getSiteArray<AdoptStep>(content, 'adopt_frame_steps', page.steps as AdoptStep[]);
+
   return (
     <div>
-      <PageHero title="Adopt a Coral Frame" subtitle="Give a reef a future — sponsor a coral frame in Hinnavaru's waters" image="https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965118488_5a4fb952.jpg" />
+      <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <div className="grid md:grid-cols-3 gap-6 mb-14">
-          {[
-            { t: 'Choose a Frame', d: 'Browse our available coral frames and pick one to sponsor.' },
-            { t: 'Make a Donation', d: 'Your donation funds the frame, fragments and ongoing care.' },
-            { t: 'Watch it Grow', d: 'Receive photo updates as your coral flourishes on the reef.' },
-          ].map((s, i) => (
+          {steps.map((s, i) => (
             <div key={i} className="rounded-2xl bg-white p-6 shadow-sm border border-sky-50">
               <div className="h-10 w-10 rounded-full bg-[#0066B3] text-white flex items-center justify-center font-bold">{i + 1}</div>
               <h3 className="mt-4 font-poppins font-bold text-[#003A70]">{s.t}</h3>
@@ -81,7 +110,7 @@ export default function AdoptFrame() {
                 <div key={p.id} className="rounded-2xl overflow-hidden bg-[#f7fbfe] border border-sky-50">
                   {p.photo && <img src={p.photo} alt="" className="h-44 w-full object-cover" />}
                   <div className="p-4">
-                    <span className="text-xs font-semibold text-[#0066B3]">{(p as any).frames?.frame_code}</span>
+                    <span className="text-xs font-semibold text-[#0066B3]">{p.frames?.frame_code}</span>
                     <p className="mt-1 text-sm text-slate-600">{p.note}</p>
                     {p.progress_date && <p className="mt-2 text-xs text-slate-400">{new Date(p.progress_date).toLocaleDateString()}</p>}
                   </div>
