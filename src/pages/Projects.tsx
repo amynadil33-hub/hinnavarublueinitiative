@@ -1,0 +1,96 @@
+import { useEffect, useMemo, useState } from 'react';
+import { Search } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { PageHero } from '@/components/PageHero';
+import { ProjectCard } from '@/components/ProjectCard';
+import { PROJECT_CATEGORIES } from '@/lib/constants';
+import type { Project } from '@/lib/types';
+
+export default function Projects() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [q, setQ] = useState('');
+  const [cat, setCat] = useState('All');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase
+      .from('projects')
+      .select('*')
+      .eq('published', true)
+      .order('project_date', { ascending: false })
+      .then(({ data }) => {
+        setProjects(data || []);
+        setLoading(false);
+      });
+  }, []);
+
+  const filtered = useMemo(
+    () =>
+      projects.filter(
+        (p) =>
+          (cat === 'All' || p.category === cat) &&
+          (p.title.toLowerCase().includes(q.toLowerCase()) ||
+            (p.description || '').toLowerCase().includes(q.toLowerCase())),
+      ),
+    [projects, q, cat],
+  );
+
+  const featured = projects.filter((p) => p.featured).slice(0, 1);
+
+  return (
+    <div>
+      <PageHero title="Our Projects" subtitle="Conservation in action across Hinnavaru and Lhaviyani Atoll" />
+
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+        {featured.length > 0 && (
+          <div className="mb-12 rounded-3xl overflow-hidden grid lg:grid-cols-2 bg-white shadow-md border border-sky-50">
+            <img src={featured[0].cover_image} alt={featured[0].title} className="h-64 lg:h-full w-full object-cover" />
+            <div className="p-8 flex flex-col justify-center">
+              <span className="text-[#00B7E5] font-semibold text-sm">FEATURED PROJECT</span>
+              <h2 className="mt-2 font-poppins font-bold text-2xl text-[#003A70]">{featured[0].title}</h2>
+              <p className="mt-3 text-slate-600">{featured[0].description}</p>
+              <a href={`/projects/${featured[0].slug}`} className="mt-5 inline-block w-fit px-5 py-2.5 rounded-full bg-[#0066B3] text-white text-sm font-semibold hover:bg-[#003A70] transition">
+                View Project
+              </a>
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search projects..."
+              className="w-full pl-10 pr-4 py-3 rounded-full border border-sky-100 outline-none focus:ring-2 focus:ring-[#00B7E5] bg-white"
+            />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {['All', ...PROJECT_CATEGORIES].map((c) => (
+              <button
+                key={c}
+                onClick={() => setCat(c)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                  cat === c ? 'bg-[#0066B3] text-white' : 'bg-white text-slate-600 border border-sky-100 hover:bg-sky-50'
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {loading ? (
+          <p className="text-center text-slate-400 py-12">Loading projects...</p>
+        ) : filtered.length === 0 ? (
+          <p className="text-center text-slate-400 py-12">No projects found.</p>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((p) => <ProjectCard key={p.id} project={p} />)}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
