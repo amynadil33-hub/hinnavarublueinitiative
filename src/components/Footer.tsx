@@ -1,13 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Mail, MapPin, Phone } from 'lucide-react';
 import { CONTACT, CRM_SUBSCRIBE, LOGO_URL } from '@/lib/constants';
+import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
+
+type FooterNavItem = { to: string; label: string };
+type SocialLink = { url: string; label?: string };
 
 export function Footer() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [sms, setSms] = useState(true);
   const [done, setDone] = useState(false);
+  const [content, setContent] = useState<Record<string, unknown>>({});
+
+  useEffect(() => {
+    fetchSiteContent(['footer', 'navigation', 'contact_details', 'site_settings', 'social_links']).then(setContent);
+  }, []);
+
+  const footer = getSiteObject(content, 'footer', {
+    description: 'A community-led environmental NGO restoring reefs and protecting the marine ecosystems of Lh. Hinnavaru, Maldives.',
+    copyright: "Protecting Hinnavaru's blue future.",
+  });
+  const contactDetails = getSiteObject(content, 'contact_details', CONTACT);
+  const settings = getSiteObject(content, 'site_settings', { logoUrl: LOGO_URL, siteName: 'Hinnavaru Blue' });
+  const navItems = getSiteArray<FooterNavItem>(content, 'navigation', [
+    { to: '/our-roots', label: 'Our Roots' },
+    { to: '/projects', label: 'Projects' },
+    { to: '/achievements', label: 'Achievements' },
+    { to: '/adopt-a-frame', label: 'Adopt a Frame' },
+    { to: '/contact-us', label: 'Contact Us' },
+  ]);
+  const socialLinks = getSiteArray<SocialLink>(content, 'social_links', []);
 
   const subscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +48,9 @@ export function Footer() {
           tags: ['newsletter', 'hbi'],
         }),
       });
-    } catch (_) {}
+    } catch (crmError) {
+      console.error('CRM subscribe error:', crmError);
+    }
     setDone(true);
     setEmail('');
     setPhone('');
@@ -35,38 +61,40 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid gap-10 md:grid-cols-4">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <img src={LOGO_URL} alt="HBI" className="h-10 w-10 rounded-full" />
-            <span className="font-poppins font-bold text-white">Hinnavaru Blue</span>
+            <img src={settings.logoUrl} alt="HBI" className="h-10 w-10 rounded-full" />
+            <span className="font-poppins font-bold text-white">{settings.siteName}</span>
           </div>
           <p className="text-sm text-sky-200/80 leading-relaxed">
-            A community-led environmental NGO restoring reefs and protecting the marine ecosystems of Lh. Hinnavaru, Maldives.
+            {footer.description}
           </p>
           <div className="flex gap-3 mt-4">
-            {[Facebook, Instagram, Twitter].map((Icon, i) => (
-              <a key={i} href="#" className="p-2 rounded-full bg-white/10 hover:bg-[#00B7E5] transition" aria-label="social">
-                <Icon className="h-4 w-4" />
-              </a>
-            ))}
+            {socialLinks.map((link, i) => {
+              const icons = [Facebook, Instagram, Twitter];
+              const Icon = icons[i] || Facebook;
+              return (
+                <a key={link.url || i} href={link.url} className="p-2 rounded-full bg-white/10 hover:bg-[#00B7E5] transition" aria-label={link.label || 'social'}>
+                  <Icon className="h-4 w-4" />
+                </a>
+              );
+            })}
           </div>
         </div>
 
         <div>
           <h4 className="font-poppins font-semibold text-white mb-4">Explore</h4>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/our-roots" className="hover:text-[#68E0D6]">Our Roots</Link></li>
-            <li><Link to="/projects" className="hover:text-[#68E0D6]">Projects</Link></li>
-            <li><Link to="/achievements" className="hover:text-[#68E0D6]">Achievements</Link></li>
-            <li><Link to="/adopt-a-frame" className="hover:text-[#68E0D6]">Adopt a Frame</Link></li>
-            <li><Link to="/contact-us" className="hover:text-[#68E0D6]">Contact Us</Link></li>
+            {navItems.map((item) => (
+              <li key={item.to}><Link to={item.to} className="hover:text-[#68E0D6]">{item.label}</Link></li>
+            ))}
           </ul>
         </div>
 
         <div>
           <h4 className="font-poppins font-semibold text-white mb-4">Contact</h4>
           <ul className="space-y-3 text-sm text-sky-200/90">
-            <li className="flex gap-2"><MapPin className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{CONTACT.address}</li>
-            <li className="flex gap-2"><Mail className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{CONTACT.email}</li>
-            <li className="flex gap-2"><Phone className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{CONTACT.phone}</li>
+            <li className="flex gap-2"><MapPin className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{contactDetails.address}</li>
+            <li className="flex gap-2"><Mail className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{contactDetails.email}</li>
+            <li className="flex gap-2"><Phone className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{contactDetails.phone}</li>
           </ul>
         </div>
 
@@ -103,7 +131,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs text-sky-200/70">
-        © {new Date().getFullYear()} Hinnavaru Blue Initiative. Protecting Hinnavaru's blue future.
+        © {new Date().getFullYear()} Hinnavaru Blue Initiative. {footer.copyright}
       </div>
     </footer>
   );

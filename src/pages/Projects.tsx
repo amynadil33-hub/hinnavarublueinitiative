@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
 import { ProjectCard } from '@/components/ProjectCard';
 import { PROJECT_CATEGORIES } from '@/lib/constants';
+import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
 import type { Project } from '@/lib/types';
 
 export default function Projects() {
@@ -11,18 +12,25 @@ export default function Projects() {
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('All');
   const [loading, setLoading] = useState(true);
+  const [content, setContent] = useState<Record<string, unknown>>({});
 
   useEffect(() => {
+    fetchSiteContent(['projects_page', 'project_categories']).then(setContent);
     supabase
       .from('projects')
       .select('*')
       .eq('published', true)
       .order('project_date', { ascending: false })
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        console.log('Supabase result:', data);
+        console.error('Supabase error:', error);
         setProjects(data || []);
         setLoading(false);
       });
   }, []);
+
+  const page = getSiteObject(content, 'projects_page', { title: 'Our Projects', subtitle: 'Conservation in action across Hinnavaru and Lhaviyani Atoll' });
+  const categories = getSiteArray<string>(content, 'project_categories', PROJECT_CATEGORIES);
 
   const filtered = useMemo(
     () =>
@@ -39,7 +47,7 @@ export default function Projects() {
 
   return (
     <div>
-      <PageHero title="Our Projects" subtitle="Conservation in action across Hinnavaru and Lhaviyani Atoll" />
+      <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         {featured.length > 0 && (
@@ -67,7 +75,7 @@ export default function Projects() {
             />
           </div>
           <div className="flex flex-wrap gap-2">
-            {['All', ...PROJECT_CATEGORIES].map((c) => (
+            {['All', ...categories].map((c) => (
               <button
                 key={c}
                 onClick={() => setCat(c)}

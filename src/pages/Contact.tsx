@@ -1,18 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapPin, Mail, Phone, CheckCircle, Users, Handshake } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
 import { CONTACT, CRM_SUBSCRIBE, BOOKING_URL } from '@/lib/constants';
+import { fetchSiteContent, getSiteObject } from '@/lib/siteContent';
+
+const CONTACT_DEFAULTS = {
+  title: 'Contact Us',
+  subtitle: 'Reach out to volunteer, partner, or learn more',
+  heroImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965170244_a1644cb0.png',
+  introTitle: 'Get in touch',
+  introText: "We'd love to hear from you — whether you want to volunteer, partner, donate or just learn more about our work.",
+  volunteerTitle: 'Volunteer with us',
+  volunteerText: 'Join our cleanups and restoration dives.',
+  partnerTitle: 'Partner with us',
+  partnerText: 'Resorts, councils and NGOs welcome.',
+};
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '', sms_opt_in: true });
   const [sent, setSent] = useState(false);
+  const [content, setContent] = useState<Record<string, unknown>>({});
+
+  useEffect(() => {
+    fetchSiteContent(['contact_page', 'contact_details']).then(setContent);
+  }, []);
+
+  const page = getSiteObject(content, 'contact_page', CONTACT_DEFAULTS);
+  const contactDetails = getSiteObject(content, 'contact_details', CONTACT);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await supabase.from('contact_messages').insert({
+    const { data, error } = await supabase.from('contact_messages').insert({
       name: form.name, email: form.email, phone: form.phone || null, subject: form.subject, message: form.message,
-    });
+    }).select();
+    console.log('Supabase result:', data);
+    console.error('Supabase error:', error);
     try {
       await fetch(CRM_SUBSCRIBE, {
         method: 'POST',
@@ -22,24 +45,26 @@ export default function Contact() {
           sms_opt_in: form.sms_opt_in, source: 'contact-form', tags: ['contact'],
         }),
       });
-    } catch (_) {}
+    } catch (crmError) {
+      console.error('CRM subscribe error:', crmError);
+    }
     setSent(true);
   };
 
   return (
     <div>
-      <PageHero title="Contact Us" subtitle="Reach out to volunteer, partner, or learn more" image="https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965170244_a1644cb0.png" />
+      <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid lg:grid-cols-2 gap-12">
         <div>
-          <h2 className="font-poppins font-bold text-2xl text-[#003A70]">Get in touch</h2>
-          <p className="mt-3 text-slate-600">We'd love to hear from you — whether you want to volunteer, partner, donate or just learn more about our work.</p>
+          <h2 className="font-poppins font-bold text-2xl text-[#003A70]">{page.introTitle}</h2>
+          <p className="mt-3 text-slate-600">{page.introText}</p>
 
           <div className="mt-8 space-y-4">
             {[
-              { icon: MapPin, label: CONTACT.address },
-              { icon: Mail, label: CONTACT.email },
-              { icon: Phone, label: CONTACT.phone },
+              { icon: MapPin, label: contactDetails.address },
+              { icon: Mail, label: contactDetails.email },
+              { icon: Phone, label: contactDetails.phone },
             ].map((c, i) => (
               <div key={i} className="flex items-center gap-3 text-slate-700">
                 <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><c.icon className="h-5 w-5" /></div>
@@ -51,14 +76,14 @@ export default function Contact() {
           <div className="mt-8 grid sm:grid-cols-2 gap-4">
             <div className="rounded-2xl p-5 bg-gradient-to-br from-[#0066B3] to-[#00B7E5] text-white">
               <Users className="h-6 w-6 text-[#68E0D6]" />
-              <h3 className="mt-3 font-poppins font-bold">Volunteer with us</h3>
-              <p className="mt-1 text-sm text-sky-100">Join our cleanups and restoration dives.</p>
+              <h3 className="mt-3 font-poppins font-bold">{page.volunteerTitle}</h3>
+              <p className="mt-1 text-sm text-sky-100">{page.volunteerText}</p>
               <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-semibold underline">Book a call</a>
             </div>
             <div className="rounded-2xl p-5 bg-gradient-to-br from-[#003A70] to-[#0066B3] text-white">
               <Handshake className="h-6 w-6 text-[#68E0D6]" />
-              <h3 className="mt-3 font-poppins font-bold">Partner with us</h3>
-              <p className="mt-1 text-sm text-sky-100">Resorts, councils and NGOs welcome.</p>
+              <h3 className="mt-3 font-poppins font-bold">{page.partnerTitle}</h3>
+              <p className="mt-1 text-sm text-sky-100">{page.partnerText}</p>
               <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-semibold underline">Schedule a meeting</a>
             </div>
           </div>
