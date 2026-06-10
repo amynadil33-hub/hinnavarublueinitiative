@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Mail, MapPin, Phone, Users, MessageCircle } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Mail, Phone, MessageCircle, Building2 } from 'lucide-react';
 import { CONTACT, CRM_SUBSCRIBE, LOGO_URL } from '@/lib/constants';
 import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
 
@@ -92,13 +92,12 @@ export function Footer() {
         <div>
           <h4 className="font-poppins font-semibold text-white mb-4">Contact</h4>
           <ul className="space-y-3 text-sm text-sky-200/90">
-            <li className="flex gap-2"><Users className="h-4 w-4 mt-0.5 text-[#68E0D6]" />Contact Person: {contactDetails.person}</li>
-            <li className="flex gap-2"><MapPin className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{contactDetails.address}</li>
+            <li className="flex gap-2"><Building2 className="h-4 w-4 mt-0.5 text-[#68E0D6]" />Office: {contactDetails.office}</li>
             <li className="flex gap-2"><Mail className="h-4 w-4 mt-0.5 text-[#68E0D6]" />{contactDetails.email}</li>
             <li className="flex gap-2"><Phone className="h-4 w-4 mt-0.5 text-[#68E0D6]" /><a href={contactDetails.phoneHref} className="hover:text-[#68E0D6]">{contactDetails.phone}</a></li>
             <li>
               <a href={contactDetails.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[#68E0D6] hover:text-white">
-                <MessageCircle className="h-4 w-4" /> WhatsApp Neeth
+                <MessageCircle className="h-4 w-4" /> WhatsApp HBI
               </a>
             </li>
           </ul>

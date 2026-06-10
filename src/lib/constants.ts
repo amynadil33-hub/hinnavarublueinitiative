@@ -46,8 +46,8 @@ export const STATUS_COLORS: Record<string, string> = {
 
 export const CONTACT = {
   org: 'Hinnavaru Blue Initiative',
-  person: 'Neeth',
-  address: 'Lh. Hinnavaru, Maldives',
+  office: 'Neeth, Lh. Hinnavaru, Maldives',
+  address: 'Neeth, Lh. Hinnavaru, Maldives',
   email: 'info@hinnavarublue.org',
   phone: '+960 7714340',
   phoneHref: 'tel:+9607714340',
