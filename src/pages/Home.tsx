@@ -1,4 +1,3 @@
-```tsx
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Waves, Trash2, Users, Sprout, Heart } from 'lucide-react';
@@ -387,4 +386,4 @@ export default function Home() {
     </div>
   );
 }
-```
+
