@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MapPin, Mail, Phone, CheckCircle, Users, MessageCircle, Calendar } from 'lucide-react';
+import { Mail, Phone, CheckCircle, Users, MessageCircle, Calendar, Building2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
 import { CONTACT, CRM_SUBSCRIBE } from '@/lib/constants';
@@ -69,12 +69,8 @@ export default function Contact() {
 
           <div className="mt-8 space-y-4">
             <div className="flex items-center gap-3 text-slate-700">
-              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><Users className="h-5 w-5" /></div>
-              <span>Contact Person: {contactDetails.person}</span>
-            </div>
-            <div className="flex items-center gap-3 text-slate-700">
-              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><MapPin className="h-5 w-5" /></div>
-              <span>{contactDetails.address}</span>
+              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><Building2 className="h-5 w-5" /></div>
+              <span>Office: {contactDetails.office}</span>
             </div>
             <div className="flex items-center gap-3 text-slate-700">
               <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]"><Phone className="h-5 w-5" /></div>
@@ -90,7 +86,7 @@ export default function Contact() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4E9B47] text-white text-sm font-semibold hover:opacity-90 transition"
             >
-              <MessageCircle className="h-4 w-4" /> WhatsApp Neeth
+              <MessageCircle className="h-4 w-4" /> Message Us on WhatsApp
             </a>
           </div>
 

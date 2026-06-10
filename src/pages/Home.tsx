@@ -10,27 +10,28 @@ import type { ImpactStat, Project, Achievement } from '@/lib/types';
 
 type HomeProgram = { title: string; text: string; img?: string; image?: string; imageKey?: 'heroImage' | 'coralImage' | 'sweepImage' };
 
-const HOME_HERO_IMAGE = '/images/hinnavaru-hero.jpg';
+const HOME_HERO_IMAGE = '/images/hinnavaru-hero.png';
 
 const HOME_DEFAULTS = {
   heroImage: HOME_HERO_IMAGE,
   coralImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965190451_e8d79013.png',
   sweepImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965170244_a1644cb0.png',
   location: 'Lh. Hinnavaru, Maldives',
-  title: "Restoring Reefs.\nReviving Community.",
-  highlight: "Protecting Hinnavaru's Blue Future.",
-  subtitle: 'A community-led environmental NGO dedicated to coral restoration, reef conservation and marine ecosystem protection.',
-  aboutEyebrow: 'ABOUT HBI',
-  aboutTitle: 'Community stewardship of our reefs',
+  title: "From Hinnavaru's lagoon\nA blue future grows.",
+  highlight: "Reefs, island, and community in harmony.",
+  subtitle: 'A community-led environmental NGO weaving coral restoration, island cleanups, and ocean education into the everyday rhythm of Hinnavaru.',
+  aboutEyebrow: 'ISLAND-ROOTED STEWARDSHIP',
+  aboutTitle: 'A Maldivian home for reef restoration',
   aboutBody: [
-    'The Hinnavaru Blue Initiative was born from a simple belief: the people who depend on the ocean are its best protectors. We bring together divers, fishers, students and families to restore damaged reefs, clean our island, and educate the next generation.',
-    'From coral frames to island sweeps, every effort strengthens both our marine ecosystem and our community.',
+    'The Hinnavaru Blue Initiative was born from a simple belief: the people who live with the lagoon, monsoon winds, reef fish and shorelines are its most faithful protectors. We bring together divers, fishers, students and families to care for damaged reefs, clean our island, and educate the next generation.',
+    'From coral frames to island sweeps, each action carries the colours of Maldivian life — turquoise water, white sand, green palms, and a community choosing a healthier ocean.',
   ],
   programs: [
-    { title: 'Coral Restoration', text: 'Building and deploying coral frames to rebuild damaged reefs.', imageKey: 'coralImage' },
-    { title: 'Island Sweep', text: 'Monthly cleanups removing plastic from beaches and lagoons.', imageKey: 'sweepImage' },
-    { title: 'Community Impact', text: 'Education programs creating lifelong ocean stewards.', imageKey: 'heroImage' },
+    { title: 'Coral Restoration', text: 'Hand-built coral frames nurturing reef gardens beneath Hinnavaru waters.', imageKey: 'coralImage' },
+    { title: 'Island Sweep', text: 'Community cleanups keeping beaches, harbours and lagoons naturally beautiful.', imageKey: 'sweepImage' },
+    { title: 'Community Impact', text: 'Ocean learning rooted in Maldivian island life and everyday stewardship.', imageKey: 'heroImage' },
   ],
+  islandNotes: ['Lagoon-blue restoration', 'Maldivian island rhythms', 'Reef-safe community action'],
   ctaTitle: "Be part of Hinnavaru's blue future",
   ctaText: 'Adopt a coral frame, volunteer for a cleanup, or partner with us to scale marine conservation across Lhaviyani Atoll.',
 };
@@ -64,12 +65,15 @@ export default function Home() {
   const programs = getSiteArray<HomeProgram>(content, 'home_programs', home.programs as HomeProgram[]);
 
   return (
-    <div>
+    <div className="bg-[#f7fbfe]">
       {/* HERO */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        <img src={HOME_HERO_IMAGE} alt="Hinnavaru reef and island coastline" className="absolute inset-0 h-full w-full object-cover object-center" />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#001B3A]/95 via-[#003A70]/85 to-[#0066B3]/65" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full">
+      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-[#001B3A]">
+        <img src={HOME_HERO_IMAGE} alt="Hinnavaru reef and island coastline" className="absolute inset-0 h-full w-full object-cover object-center scale-105" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#001B3A]/95 via-[#003A70]/82 to-[#00B7E5]/45" />
+        <div className="absolute -left-24 top-24 h-72 w-72 rounded-full bg-[#68E0D6]/20 blur-3xl" />
+        <div className="absolute right-0 bottom-20 h-96 w-96 rounded-full bg-[#F7D36A]/20 blur-3xl" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#f7fbfe] via-[#f7fbfe]/20 to-transparent" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-[1.05fr_0.95fr] gap-10 items-center">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-white text-sm backdrop-blur">
               <Waves className="h-4 w-4" /> {home.location}
@@ -78,9 +82,9 @@ export default function Home() {
               {home.title.split('\n').map((line) => (
                 <span key={line}>{line}<br /></span>
               ))}
-              <span className="text-[#68E0D6]">{home.highlight}</span>
+              <span className="bg-gradient-to-r from-[#68E0D6] via-white to-[#F7D36A] bg-clip-text text-transparent">{home.highlight}</span>
             </h1>
-            <p className="mt-6 text-lg text-sky-100 max-w-xl">
+            <p className="mt-6 text-lg text-sky-50 max-w-xl leading-relaxed">
               {home.subtitle}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -92,13 +96,31 @@ export default function Home() {
               </Link>
             </div>
           </div>
+
+          <div className="hidden lg:block justify-self-end">
+            <div className="relative w-[390px] rounded-[2rem] border border-white/20 bg-white/12 p-5 shadow-2xl backdrop-blur-md">
+              <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full border border-[#68E0D6]/40" />
+              <div className="absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-[#68E0D6]/20 blur-2xl" />
+              <div className="rounded-[1.5rem] overflow-hidden border border-white/20">
+                <img src={home.coralImage} alt="Coral restoration in Hinnavaru waters" className="h-64 w-full object-cover" />
+              </div>
+              <div className="mt-5 space-y-3">
+                {(home.islandNotes || HOME_DEFAULTS.islandNotes).map((note) => (
+                  <div key={note} className="flex items-center gap-3 rounded-2xl bg-white/15 px-4 py-3 text-sm font-semibold text-white">
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#F7D36A] shadow-[0_0_18px_rgba(247,211,106,0.8)]" />
+                    {note}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
         <Wave className="absolute bottom-0 w-full h-16" color="#f7fbfe" />
       </section>
 
       {/* STATS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 -mt-10 relative z-20">
-        <div className="rounded-3xl bg-white shadow-xl border border-sky-50 p-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="rounded-3xl bg-white/95 shadow-xl border border-sky-100 p-8 grid grid-cols-2 md:grid-cols-4 gap-8 backdrop-blur">
           {stats.map((s) => (
             <StatCounter key={s.id} value={s.value} suffix={s.suffix} label={s.label} />
           ))}
@@ -106,7 +128,8 @@ export default function Home() {
       </section>
 
       {/* ABOUT */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
+      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 grid lg:grid-cols-2 gap-12 items-center overflow-hidden">
+        <div className="absolute left-4 top-12 h-32 w-32 rounded-full bg-[#68E0D6]/20 blur-3xl" />
         <div>
           <span className="text-[#00B7E5] font-semibold">{home.aboutEyebrow}</span>
           <h2 className="mt-2 font-poppins font-bold text-3xl sm:text-4xl text-[#003A70]">
@@ -122,15 +145,20 @@ export default function Home() {
             Discover Our Roots <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <img src={home.coralImage} alt="coral" className="rounded-2xl h-56 w-full object-cover shadow-md" />
-          <img src={home.sweepImage} alt="cleanup" className="rounded-2xl h-56 w-full object-cover shadow-md mt-8" />
+        <div className="relative grid grid-cols-2 gap-4">
+          <div className="absolute inset-x-8 top-10 bottom-0 rounded-full bg-[#00B7E5]/10 blur-3xl" />
+          <img src={home.coralImage} alt="Coral restoration frame in Maldivian waters" className="relative rounded-[2rem] h-64 w-full object-cover shadow-xl ring-4 ring-white" />
+          <img src={home.sweepImage} alt="Hinnavaru community cleanup" className="relative rounded-[2rem] h-64 w-full object-cover shadow-xl ring-4 ring-white mt-10" />
+          <div className="absolute -bottom-6 left-8 rounded-2xl bg-white px-5 py-4 shadow-xl border border-sky-50">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#00B7E5]">Made in Hinnavaru</p>
+            <p className="mt-1 font-poppins font-bold text-[#003A70]">Lagoon care, island heart</p>
+          </div>
         </div>
       </section>
 
       {/* FEATURED PROJECTS */}
-      <section className="bg-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="bg-gradient-to-b from-white to-sky-50/80 py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-[#00B7E5] font-semibold">OUR WORK</span>
             <h2 className="mt-2 font-poppins font-bold text-3xl sm:text-4xl text-[#003A70]">Featured Projects</h2>
@@ -153,7 +181,7 @@ export default function Home() {
           const Icon = icons[index] || Sprout;
           const img = p.img || p.image || home[p.imageKey as keyof typeof home] || home.heroImage;
           return (
-          <div key={p.title} className="rounded-2xl overflow-hidden bg-white shadow-sm border border-sky-50 group">
+          <div key={p.title} className="rounded-[1.75rem] overflow-hidden bg-white shadow-sm border border-sky-100 group hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
             <div className="h-40 overflow-hidden">
               <img src={img} alt={p.title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
@@ -170,7 +198,8 @@ export default function Home() {
       </section>
 
       {/* ACHIEVEMENTS */}
-      <section className="bg-gradient-to-br from-[#003A70] to-[#0066B3] py-20 text-white">
+      <section className="relative bg-gradient-to-br from-[#00284f] via-[#003A70] to-[#0066B3] py-20 text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, #68E0D6 0 2px, transparent 2px), radial-gradient(circle at 70% 60%, #F7D36A 0 1px, transparent 1px)', backgroundSize: '52px 52px, 38px 38px' }} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-[#68E0D6] font-semibold">MILESTONES</span>
