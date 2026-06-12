@@ -8,7 +8,7 @@
 
 @layer base {
   :root {
-    --background: 180 67% 96%;
+    --background: 180 62% 92%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -32,8 +32,8 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 180 49% 87%;
-    --input: 180 49% 87%;
+    --border: 179 48% 81%;
+    --input: 179 48% 81%;
     --ring: 221 83% 53%;
 
     --radius: 0.5rem;
@@ -97,12 +97,12 @@
   body,
   #root {
     min-height: 100%;
-    background: #F0FCFC;
+    background: #DDF7F7;
   }
 
   body {
     @apply bg-background text-foreground font-sans dark:bg-background dark:text-foreground;
-    background-color: #F0FCFC;
+    background-color: #DDF7F7;
   }
 
   pre, code {
@@ -145,7 +145,7 @@
 .font-inter { font-family: 'Inter', sans-serif; }
 
 .input-f {
-  @apply rounded-xl border border-[#CDEFEF] px-4 py-2.5 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-[#00B7E5] bg-white;
+  @apply rounded-xl border border-[#B7E6E5] px-4 py-2.5 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-[#00B7E5] bg-white;
 }
 
 html { scroll-behavior: smooth; }

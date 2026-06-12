@@ -45,7 +45,7 @@ export default function OurRoots() {
   ]);
 
   return (
-    <div className="bg-[#F0FCFC]">
+    <div className="bg-[#DDF7F7]">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid lg:grid-cols-2 gap-12 items-center">
@@ -62,7 +62,7 @@ export default function OurRoots() {
         </div>
       </section>
 
-      <section className="bg-[#E8F8F7] py-16">
+      <section className="bg-[#CFF1F0] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-6">
           <div className="rounded-3xl p-8 bg-gradient-to-br from-[#0066B3] to-[#00B7E5] text-white">
             <Compass className="h-8 w-8 text-[#68E0D6]" />
@@ -103,7 +103,7 @@ export default function OurRoots() {
         </div>
       </section>
 
-      <section className="bg-[#E8F8F7] py-16">
+      <section className="bg-[#CFF1F0] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-3 gap-8">
           {featureBlocks.map((b, i) => {
             const icons = [Heart, Users, Fish];

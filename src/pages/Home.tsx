@@ -107,7 +107,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#F0FCFC] text-slate-800 overflow-hidden">
+    <div className="bg-[#DDF7F7] text-slate-800 overflow-hidden">
       {/* HERO */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden">
         <img
@@ -117,7 +117,7 @@ export default function Home() {
         />
 
         <div className="absolute inset-0 bg-gradient-to-r from-[#002B4F]/55 via-[#006B8F]/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#F0FCFC] via-[#E8F8F7]/70 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#DDF7F7] via-[#CFF1F0]/70 to-transparent" />
 
         <div className="absolute -left-24 top-28 h-72 w-72 rounded-full bg-[#68E0D6]/20 blur-3xl" />
         <div className="absolute right-10 bottom-24 h-64 w-64 rounded-full bg-[#F5E7B2]/20 blur-3xl" />
@@ -165,11 +165,11 @@ export default function Home() {
           </div>
         </div>
 
-        <Wave className="absolute bottom-0 w-full h-16" color="#F0FCFC" />
+        <Wave className="absolute bottom-0 w-full h-16" color="#DDF7F7" />
       </section>
 
       {/* INTRO */}
-      <section className="relative bg-[#F0FCFC] py-24">
+      <section className="relative bg-[#DDF7F7] py-24">
         <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#68E0D6]/20 blur-3xl" />
         <div className="absolute right-0 bottom-12 h-72 w-72 rounded-full bg-[#F5E7B2]/40 blur-3xl" />
 
@@ -228,8 +228,8 @@ export default function Home() {
       </section>
 
       {/* WHAT WE PROTECT */}
-      <section className="relative bg-gradient-to-br from-[#F0FCFC] via-[#E8F8F7] to-[#FFF8E6] py-24">
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#F0FCFC] to-transparent" />
+      <section className="relative bg-gradient-to-br from-[#DDF7F7] via-[#CFF1F0] to-[#BFEAE9] py-24">
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#DDF7F7] to-transparent" />
         <div className="absolute -right-20 top-10 h-72 w-72 rounded-full bg-[#00B7E5]/10 blur-3xl" />
         <div className="absolute -left-20 bottom-10 h-72 w-72 rounded-full bg-[#4E9B47]/10 blur-3xl" />
 
@@ -294,8 +294,8 @@ export default function Home() {
       </section>
 
       {/* FEATURED PROJECTS */}
-      <section className="relative bg-[#F0FCFC] py-24">
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#E8F8F7] to-transparent" />
+      <section className="relative bg-[#DDF7F7] py-24">
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#CFF1F0] to-transparent" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">

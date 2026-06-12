@@ -202,7 +202,7 @@ export default function AdoptFrame() {
   );
 
   return (
-    <div className="bg-[#F0FCFC]">
+    <div className="bg-[#DDF7F7]">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
@@ -530,7 +530,7 @@ export default function AdoptFrame() {
       </section>
 
       {progress.length > 0 && (
-        <section className="bg-[#E8F8F7] py-16">
+        <section className="bg-[#CFF1F0] py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-center gap-2 mb-6">
               <Camera className="h-6 w-6 text-[#00B7E5]" />

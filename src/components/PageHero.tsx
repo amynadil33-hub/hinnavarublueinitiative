@@ -23,7 +23,7 @@ export function PageHero({
           {subtitle && <p className="mt-4 text-sky-100 text-base sm:text-lg">{subtitle}</p>}
         </div>
       </div>
-      <Wave className="block w-full h-12 -mt-1" color="#F0FCFC" />
+      <Wave className="block w-full h-12 -mt-1" color="#DDF7F7" />
     </section>
   );
 }

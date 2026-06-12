@@ -11,7 +11,7 @@ const App = () => (
   <ThemeProvider defaultTheme="light">
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="min-h-screen bg-[#F0FCFC]">
+        <div className="min-h-screen bg-[#DDF7F7]">
           <Toaster />
           <Sonner />
           <AppLayout />

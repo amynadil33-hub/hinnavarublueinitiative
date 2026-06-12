@@ -134,7 +134,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="bg-[#F0FCFC]">
+    <div className="bg-[#DDF7F7]">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid lg:grid-cols-2 gap-12">
