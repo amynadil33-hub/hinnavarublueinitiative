@@ -1,8 +1,10 @@
+import type { ProjectCategory } from './constants';
+
 export interface Project {
   id: string;
   title: string;
   slug: string;
-  category: string;
+  category: ProjectCategory;
   description: string;
   full_description?: string;
   cover_image?: string;
