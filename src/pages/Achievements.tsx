@@ -50,7 +50,7 @@ export default function Achievements() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0FCFC]">
+    <div className="min-h-screen bg-[#DDF7F7]">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16">

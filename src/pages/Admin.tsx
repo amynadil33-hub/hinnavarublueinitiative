@@ -130,7 +130,7 @@ export default function Admin() {
   const editable = FIELDS[tab];
 
   return (
-    <div className="min-h-screen bg-[#F0FCFC]">
+    <div className="min-h-screen bg-[#DDF7F7]">
       <header className="bg-[#003A70] text-white px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img src={LOGO_URL} alt="Hinnavaru Blue Initiative logo" className="h-9 w-9 object-contain" />
