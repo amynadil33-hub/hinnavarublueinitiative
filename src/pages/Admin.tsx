@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { LOGO_URL } from '@/lib/constants';
+import { LOGO_URL, PROJECT_CATEGORIES, normalizeProjectCategory } from '@/lib/constants';
 import { LogOut, Trash2, Plus, Eye, EyeOff } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 
@@ -76,6 +76,9 @@ export default function Admin() {
 
   const save = async () => {
     const payload = { ...editing };
+    if (tab === 'projects' && typeof payload.category === 'string') {
+      payload.category = normalizeProjectCategory(payload.category);
+    }
     delete payload.created_at; delete payload.updated_at;
     if (payload.donation_amount) payload.donation_amount = Number(payload.donation_amount);
     if (payload.id) {
@@ -127,7 +130,7 @@ export default function Admin() {
   const editable = FIELDS[tab];
 
   return (
-    <div className="min-h-screen bg-[#f7fbfe]">
+    <div className="min-h-screen bg-[#F0FCFC]">
       <header className="bg-[#003A70] text-white px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img src={LOGO_URL} alt="Hinnavaru Blue Initiative logo" className="h-9 w-9 object-contain" />
@@ -136,9 +139,9 @@ export default function Admin() {
         <button onClick={() => supabase.auth.signOut()} className="flex items-center gap-2 text-sm hover:text-[#68E0D6]"><LogOut className="h-4 w-4" /> Sign Out</button>
       </header>
 
-      <div className="flex flex-wrap gap-2 px-6 py-4 border-b border-sky-100 bg-white">
+      <div className="flex flex-wrap gap-2 px-6 py-4 border-b border-[#CDEFEF] bg-white">
         {TABS.map((t) => (
-          <button key={t.key} onClick={() => { setTab(t.key); setEditing(null); }} className={`px-4 py-2 rounded-full text-sm font-medium ${tab === t.key ? 'bg-[#0066B3] text-white' : 'bg-sky-50 text-slate-600'}`}>{t.label}</button>
+          <button key={t.key} onClick={() => { setTab(t.key); setEditing(null); }} className={`px-4 py-2 rounded-full text-sm font-medium ${tab === t.key ? 'bg-[#0066B3] text-white' : 'bg-[#E8F8F7] text-slate-600'}`}>{t.label}</button>
         ))}
       </div>
 
@@ -148,16 +151,33 @@ export default function Admin() {
         )}
 
         {editing && editable && (
-          <div className="mb-6 rounded-2xl bg-white p-6 shadow-sm border border-sky-50">
+          <div className="mb-6 rounded-2xl bg-white p-6 shadow-sm border border-[#CDEFEF]">
             <h3 className="font-poppins font-bold text-[#003A70] mb-4">{editing.id ? 'Edit' : 'Create'}</h3>
             <div className="grid sm:grid-cols-2 gap-3">
-              {editable.map((f) => (
-                f.type === 'textarea' ? (
+              {editable.map((f) => {
+                if (tab === 'projects' && f.key === 'category') {
+                  return (
+                    <select
+                      key={f.key}
+                      value={normalizeProjectCategory(String(editing[f.key] || ''))}
+                      onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })}
+                      className="input-f"
+                    >
+                      {PROJECT_CATEGORIES.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                  );
+                }
+
+                return f.type === 'textarea' ? (
                   <textarea key={f.key} placeholder={f.label} value={editing[f.key] || ''} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })} className="input-f sm:col-span-2" rows={2} />
                 ) : (
                   <input key={f.key} type={f.type || 'text'} placeholder={f.label} value={editing[f.key] || ''} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })} className="input-f" />
-                )
-              ))}
+                );
+              })}
             </div>
             <div className="mt-4 flex gap-3">
               <button onClick={save} className="px-5 py-2 rounded-full bg-[#0066B3] text-white text-sm font-semibold">Save</button>
@@ -168,10 +188,10 @@ export default function Admin() {
 
         <div className="space-y-3">
           {rows.map((r) => (
-            <div key={r.id} className="rounded-xl bg-white p-4 shadow-sm border border-sky-50 flex items-center justify-between gap-4">
+            <div key={r.id} className="rounded-xl bg-white p-4 shadow-sm border border-[#CDEFEF] flex items-center justify-between gap-4">
               <div className="min-w-0">
                 <div className="font-semibold text-[#003A70] truncate">{r.title || r.frame_code || r.name || r.subject || r.note || 'Item'}</div>
-                <div className="text-xs text-slate-500 truncate">{r.category || r.email || r.status || r.location || ''}</div>
+                <div className="text-xs text-slate-500 truncate">{tab === 'projects' && r.category ? normalizeProjectCategory(String(r.category)) : r.category || r.email || r.status || r.location || ''}</div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 {hasPublish && (
@@ -179,7 +199,7 @@ export default function Admin() {
                     {r.published ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                   </button>
                 )}
-                {editable && <button onClick={() => setEditing(r)} className="px-3 py-1.5 rounded-lg bg-sky-50 text-[#0066B3] text-xs font-semibold">Edit</button>}
+                {editable && <button onClick={() => setEditing(r)} className="px-3 py-1.5 rounded-lg bg-[#E8F8F7] text-[#0066B3] text-xs font-semibold">Edit</button>}
                 <button onClick={() => del(r.id)} className="p-2 text-red-400 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
               </div>
             </div>

@@ -30,7 +30,7 @@ export default function Achievements() {
   const filtered = useMemo(() => items.filter((a) => cat === 'All' || a.category === cat), [items, cat]);
 
   return (
-    <div>
+    <div className="bg-[#F0FCFC]">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
@@ -49,7 +49,7 @@ export default function Achievements() {
               key={c}
               onClick={() => setCat(c)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                cat === c ? 'bg-[#0066B3] text-white' : 'bg-white text-slate-600 border border-sky-100 hover:bg-sky-50'
+                cat === c ? 'bg-[#0066B3] text-white' : 'bg-white text-slate-600 border border-[#CDEFEF] hover:bg-[#E8F8F7]'
               }`}
             >
               {c}
@@ -63,12 +63,12 @@ export default function Achievements() {
           <div className="space-y-10">
             {filtered.map((a, i) => (
               <div key={a.id} className={`relative flex flex-col sm:flex-row gap-6 ${i % 2 === 0 ? 'sm:flex-row-reverse' : ''}`}>
-                <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 h-8 w-8 rounded-full bg-[#00B7E5] flex items-center justify-center ring-4 ring-white">
+                <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 h-8 w-8 rounded-full bg-[#00B7E5] flex items-center justify-center ring-4 ring-[#F0FCFC]">
                   <Award className="h-4 w-4 text-white" />
                 </div>
                 <div className="sm:w-1/2" />
                 <div className="sm:w-1/2 pl-14 sm:pl-0">
-                  <div className="rounded-2xl bg-white shadow-sm border border-sky-50 overflow-hidden">
+                  <div className="rounded-2xl bg-white shadow-sm border border-[#CDEFEF] overflow-hidden">
                     {a.image && <img src={a.image} alt={a.title} className="h-40 w-full object-cover" />}
                     <div className="p-5">
                       <span className="text-xs font-semibold text-[#00B7E5]">{a.category}</span>
