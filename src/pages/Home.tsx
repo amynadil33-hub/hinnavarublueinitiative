@@ -189,8 +189,8 @@ export default function Home() {
                 {home.philosophyText}
               </p>
 
-              <div className="mt-8 grid sm:grid-cols-3 gap-3">
-                {['Coral Restoration', 'Island Sweep', 'Community Stewardship'].map(
+              <div className="mt-8 grid sm:grid-cols-2 gap-3">
+                {['Coral Restoration', 'Island Sweep & Initiatives'].map(
                   (item) => (
                     <div
                       key={item}

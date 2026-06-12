@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { LOGO_URL } from '@/lib/constants';
+import { LOGO_URL, PROJECT_CATEGORIES, normalizeProjectCategory } from '@/lib/constants';
 import { LogOut, Trash2, Plus, Eye, EyeOff } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 
@@ -76,6 +76,9 @@ export default function Admin() {
 
   const save = async () => {
     const payload = { ...editing };
+    if (tab === 'projects' && typeof payload.category === 'string') {
+      payload.category = normalizeProjectCategory(payload.category);
+    }
     delete payload.created_at; delete payload.updated_at;
     if (payload.donation_amount) payload.donation_amount = Number(payload.donation_amount);
     if (payload.id) {
@@ -151,13 +154,30 @@ export default function Admin() {
           <div className="mb-6 rounded-2xl bg-white p-6 shadow-sm border border-sky-50">
             <h3 className="font-poppins font-bold text-[#003A70] mb-4">{editing.id ? 'Edit' : 'Create'}</h3>
             <div className="grid sm:grid-cols-2 gap-3">
-              {editable.map((f) => (
-                f.type === 'textarea' ? (
+              {editable.map((f) => {
+                if (tab === 'projects' && f.key === 'category') {
+                  return (
+                    <select
+                      key={f.key}
+                      value={normalizeProjectCategory(String(editing[f.key] || ''))}
+                      onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })}
+                      className="input-f"
+                    >
+                      {PROJECT_CATEGORIES.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                  );
+                }
+
+                return f.type === 'textarea' ? (
                   <textarea key={f.key} placeholder={f.label} value={editing[f.key] || ''} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })} className="input-f sm:col-span-2" rows={2} />
                 ) : (
                   <input key={f.key} type={f.type || 'text'} placeholder={f.label} value={editing[f.key] || ''} onChange={(e) => setEditing({ ...editing, [f.key]: e.target.value })} className="input-f" />
-                )
-              ))}
+                );
+              })}
             </div>
             <div className="mt-4 flex gap-3">
               <button onClick={save} className="px-5 py-2 rounded-full bg-[#0066B3] text-white text-sm font-semibold">Save</button>
@@ -171,7 +191,7 @@ export default function Admin() {
             <div key={r.id} className="rounded-xl bg-white p-4 shadow-sm border border-sky-50 flex items-center justify-between gap-4">
               <div className="min-w-0">
                 <div className="font-semibold text-[#003A70] truncate">{r.title || r.frame_code || r.name || r.subject || r.note || 'Item'}</div>
-                <div className="text-xs text-slate-500 truncate">{r.category || r.email || r.status || r.location || ''}</div>
+                <div className="text-xs text-slate-500 truncate">{tab === 'projects' && r.category ? normalizeProjectCategory(String(r.category)) : r.category || r.email || r.status || r.location || ''}</div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 {hasPublish && (

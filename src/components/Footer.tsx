@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Mail, Phone, MessageCircle, Building2 } from 'lucide-react';
-import { CONTACT, CRM_SUBSCRIBE, LOGO_URL } from '@/lib/constants';
+import { CONTACT, LOGO_URL } from '@/lib/constants';
 import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
 
 type FooterNavItem = { to: string; label: string };
 type SocialLink = { url: string; label?: string };
 
 export function Footer() {
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [sms, setSms] = useState(true);
-  const [done, setDone] = useState(false);
   const [content, setContent] = useState<Record<string, unknown>>({});
 
   useEffect(() => {
@@ -32,29 +28,6 @@ export function Footer() {
     { to: '/contact-us', label: 'Contact Us' },
   ]);
   const socialLinks = getSiteArray<SocialLink>(content, 'social_links', []);
-
-  const subscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    try {
-      await fetch(CRM_SUBSCRIBE, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          phone: phone || undefined,
-          sms_opt_in: sms,
-          source: 'footer-signup',
-          tags: ['newsletter', 'hbi'],
-        }),
-      });
-    } catch (crmError) {
-      console.error('CRM subscribe error:', crmError);
-    }
-    setDone(true);
-    setEmail('');
-    setPhone('');
-  };
 
   return (
     <footer className="bg-[#003A70] text-sky-100 mt-auto">
@@ -104,35 +77,18 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="font-poppins font-semibold text-white mb-4">Stay Updated</h4>
-          {done ? (
-            <p className="text-sm text-[#68E0D6]">Thank you for joining our blue community!</p>
-          ) : (
-            <form onSubmit={subscribe} className="space-y-2">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email"
-                className="w-full rounded-lg px-3 py-2 text-sm text-slate-800 outline-none"
-              />
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Phone number (optional)"
-                className="w-full rounded-lg px-3 py-2 text-sm text-slate-800 outline-none"
-              />
-              <label className="flex items-start gap-2 text-[11px] text-sky-200/80">
-                <input type="checkbox" checked={sms} onChange={(e) => setSms(e.target.checked)} className="mt-0.5" />
-                <span>Text me updates. Msg &amp; data rates may apply. Reply STOP to unsubscribe.</span>
-              </label>
-              <button className="w-full rounded-lg bg-gradient-to-r from-[#00B7E5] to-[#68E0D6] text-[#003A70] font-semibold py-2 text-sm hover:opacity-90">
-                Subscribe
-              </button>
-            </form>
-          )}
+          <h4 className="font-poppins font-semibold text-white mb-4">Take Part</h4>
+          <p className="text-sm text-sky-200/80 leading-relaxed">
+            Support reef restoration, join island-led conservation work, or speak with our team about partnerships.
+          </p>
+          <div className="mt-4 flex flex-col gap-2 text-sm">
+            <Link to="/adopt-a-frame" className="inline-flex w-fit items-center text-[#68E0D6] hover:text-white">
+              Adopt a coral frame
+            </Link>
+            <Link to="/contact-us" className="inline-flex w-fit items-center text-[#68E0D6] hover:text-white">
+              Contact our team
+            </Link>
+          </div>
         </div>
       </div>
       <div className="border-t border-white/10 py-5 text-center text-xs text-sky-200/70">
