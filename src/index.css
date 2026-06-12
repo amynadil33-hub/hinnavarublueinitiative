@@ -93,8 +93,16 @@
     @apply border-border;
   }
 
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    background: #F0FCFC;
+  }
+
   body {
     @apply bg-background text-foreground font-sans dark:bg-background dark:text-foreground;
+    background-color: #F0FCFC;
   }
 
   pre, code {

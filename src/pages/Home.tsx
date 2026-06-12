@@ -376,7 +376,7 @@ export default function Home() {
 
             <Link
               to="/contact-us"
-              className="px-6 py-3 rounded-full bg-white text-[#003A70] font-semibold hover:bg-sky-50 transition shadow-lg"
+              className="px-6 py-3 rounded-full bg-white text-[#003A70] font-semibold hover:bg-[#E8F8F7] transition shadow-lg"
             >
               Contact Us
             </Link>
