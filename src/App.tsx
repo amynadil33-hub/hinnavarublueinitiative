@@ -8,15 +8,17 @@ import AppLayout from "@/components/AppLayout";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <ThemeProvider defaultTheme="light">
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <AppLayout />
-      </TooltipProvider>
-    </QueryClientProvider>
-  </ThemeProvider>
+  <div className="min-h-screen bg-[#F0FCFC]">
+    <ThemeProvider defaultTheme="light">
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <AppLayout />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
+  </div>
 );
 
 export default App;

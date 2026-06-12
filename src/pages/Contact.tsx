@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
-import { CRM_SUBSCRIBE } from '@/lib/constants';
+import { CRM_ENDPOINT } from '@/lib/constants';
 import { fetchSiteContent, getSiteObject } from '@/lib/siteContent';
 
 const CONTACT_DEFAULTS = {
@@ -102,8 +102,8 @@ export default function Contact() {
     }
 
     try {
-      if (CRM_SUBSCRIBE) {
-        await fetch(CRM_SUBSCRIBE, {
+      if (CRM_ENDPOINT) {
+        await fetch(CRM_ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -117,7 +117,7 @@ export default function Contact() {
         });
       }
     } catch (crmError) {
-      console.error('CRM subscribe error:', crmError);
+      console.error('CRM sync error:', crmError);
     }
 
     setSubmitting(false);
@@ -134,7 +134,7 @@ export default function Contact() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#F0FCFC]">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid lg:grid-cols-2 gap-12">
@@ -149,7 +149,7 @@ export default function Contact() {
 
           <div className="mt-8 space-y-4">
             <div className="flex items-center gap-3 text-slate-700">
-              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]">
+              <div className="h-10 w-10 rounded-xl bg-[#E8F8F7] flex items-center justify-center text-[#0066B3]">
                 <Building2 className="h-5 w-5" />
               </div>
               <span>
@@ -158,7 +158,7 @@ export default function Contact() {
             </div>
 
             <div className="flex items-center gap-3 text-slate-700">
-              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]">
+              <div className="h-10 w-10 rounded-xl bg-[#E8F8F7] flex items-center justify-center text-[#0066B3]">
                 <Phone className="h-5 w-5" />
               </div>
               <a
@@ -170,7 +170,7 @@ export default function Contact() {
             </div>
 
             <div className="flex items-center gap-3 text-slate-700">
-              <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]">
+              <div className="h-10 w-10 rounded-xl bg-[#E8F8F7] flex items-center justify-center text-[#0066B3]">
                 <Mail className="h-5 w-5" />
               </div>
               <span>{contactDetails.email}</span>
@@ -234,7 +234,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <div className="rounded-3xl bg-white shadow-md border border-sky-50 p-8">
+        <div className="rounded-3xl bg-white shadow-md border border-[#CDEFEF] p-8">
           {sent ? (
             <div className="text-center py-12">
               <CheckCircle className="h-14 w-14 text-[#4E9B47] mx-auto" />

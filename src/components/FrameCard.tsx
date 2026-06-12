@@ -5,7 +5,7 @@ import type { Frame } from '@/lib/types';
 export function FrameCard({ frame, onAdopt }: { frame: Frame; onAdopt: (f: Frame) => void }) {
   const available = frame.status === 'Available';
   return (
-    <div className="rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-lg transition border border-sky-50">
+    <div className="rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-lg transition border border-[#CDEFEF]">
       <div className="relative h-44 overflow-hidden">
         <img src={frame.photo} alt={frame.frame_code} className="h-full w-full object-cover" />
         <span className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[frame.status] || 'bg-slate-100 text-slate-600'}`}>

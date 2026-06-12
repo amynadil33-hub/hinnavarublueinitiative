@@ -5,9 +5,11 @@ import { AppProvider } from '@/contexts/AppContext';
 
 const Index: React.FC = () => {
   return (
-    <AppProvider>
-      <AppLayout />
-    </AppProvider>
+    <div className="min-h-screen bg-[#F0FCFC]">
+      <AppProvider>
+        <AppLayout />
+      </AppProvider>
+    </div>
   );
 };
 

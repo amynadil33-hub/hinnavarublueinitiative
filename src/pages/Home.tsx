@@ -107,7 +107,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#FFFDF7] text-slate-800 overflow-hidden">
+    <div className="min-h-screen bg-[#F0FCFC] text-slate-800 overflow-hidden">
       {/* HERO */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden">
         <img
@@ -117,7 +117,7 @@ export default function Home() {
         />
 
         <div className="absolute inset-0 bg-gradient-to-r from-[#002B4F]/55 via-[#006B8F]/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#FFFDF7] via-[#F5E7B2]/20 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#F0FCFC] via-[#E8F8F7]/70 to-transparent" />
 
         <div className="absolute -left-24 top-28 h-72 w-72 rounded-full bg-[#68E0D6]/20 blur-3xl" />
         <div className="absolute right-10 bottom-24 h-64 w-64 rounded-full bg-[#F5E7B2]/20 blur-3xl" />
@@ -148,7 +148,7 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 to="/projects"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FFFDF7] text-[#003A70] font-semibold hover:bg-white transition shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FAFFFF] text-[#003A70] font-semibold hover:bg-white transition shadow-lg"
               >
                 Explore Projects
                 <ArrowRight className="h-4 w-4" />
@@ -165,11 +165,11 @@ export default function Home() {
           </div>
         </div>
 
-        <Wave className="absolute bottom-0 w-full h-16" color="#FFFDF7" />
+        <Wave className="absolute bottom-0 w-full h-16" color="#F0FCFC" />
       </section>
 
       {/* INTRO */}
-      <section className="relative bg-[#FFFDF7] py-24">
+      <section className="relative bg-[#F0FCFC] py-24">
         <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#68E0D6]/20 blur-3xl" />
         <div className="absolute right-0 bottom-12 h-72 w-72 rounded-full bg-[#F5E7B2]/40 blur-3xl" />
 
@@ -189,8 +189,8 @@ export default function Home() {
                 {home.philosophyText}
               </p>
 
-              <div className="mt-8 grid sm:grid-cols-3 gap-3">
-                {['Coral Restoration', 'Island Sweep', 'Community Stewardship'].map(
+              <div className="mt-8 grid sm:grid-cols-2 gap-3">
+                {['Coral Restoration', 'Island Sweep & Initiatives'].map(
                   (item) => (
                     <div
                       key={item}
@@ -228,8 +228,8 @@ export default function Home() {
       </section>
 
       {/* WHAT WE PROTECT */}
-      <section className="relative bg-gradient-to-br from-[#EFFFFD] via-[#F7FBFE] to-[#FFF8E1] py-24">
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#FFFDF7] to-transparent" />
+      <section className="relative bg-gradient-to-br from-[#F0FCFC] via-[#E8F8F7] to-[#FFF8E6] py-24">
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#F0FCFC] to-transparent" />
         <div className="absolute -right-20 top-10 h-72 w-72 rounded-full bg-[#00B7E5]/10 blur-3xl" />
         <div className="absolute -left-20 bottom-10 h-72 w-72 rounded-full bg-[#4E9B47]/10 blur-3xl" />
 
@@ -294,8 +294,8 @@ export default function Home() {
       </section>
 
       {/* FEATURED PROJECTS */}
-      <section className="relative bg-[#FFFDF7] py-24">
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#F7FBFE] to-transparent" />
+      <section className="relative bg-[#F0FCFC] py-24">
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#E8F8F7] to-transparent" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
@@ -376,7 +376,7 @@ export default function Home() {
 
             <Link
               to="/contact-us"
-              className="px-6 py-3 rounded-full bg-white text-[#003A70] font-semibold hover:bg-sky-50 transition shadow-lg"
+              className="px-6 py-3 rounded-full bg-white text-[#003A70] font-semibold hover:bg-[#E8F8F7] transition shadow-lg"
             >
               Contact Us
             </Link>
