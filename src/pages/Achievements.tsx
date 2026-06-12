@@ -1,35 +1,55 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Award } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Award, X, Calendar } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
-import { ACHIEVEMENT_CATEGORIES } from '@/lib/constants';
-import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
+import { fetchSiteContent, getSiteObject } from '@/lib/siteContent';
 import type { Achievement } from '@/lib/types';
 
 export default function Achievements() {
   const [items, setItems] = useState<Achievement[]>([]);
-  const [cat, setCat] = useState('All');
   const [content, setContent] = useState<Record<string, unknown>>({});
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [activeImage, setActiveImage] = useState<Achievement | null>(null);
 
   useEffect(() => {
-    fetchSiteContent(['achievements_page', 'achievement_categories']).then(setContent);
-    supabase.from('achievements').select('*').eq('published', true).order('achievement_date', { ascending: false }).then(({ data, error }) => {
-      console.log('Supabase result:', data);
-      console.error('Supabase error:', error);
-      setItems(data || []);
-    });
+    fetchSiteContent(['achievements_page']).then(setContent);
+
+    supabase
+      .from('achievements')
+      .select('*')
+      .eq('published', true)
+      .eq('category', 'Awards')
+      .order('achievement_date', { ascending: false })
+      .then(({ data, error }) => {
+        console.log('Supabase awards result:', data);
+        console.error('Supabase awards error:', error);
+        setItems(data || []);
+      });
   }, []);
 
   const page = getSiteObject(content, 'achievements_page', {
-    title: 'Our Achievements',
-    subtitle: "Milestones on our journey to restore Hinnavaru's reefs",
-    heroImage: 'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965118488_5a4fb952.jpg',
+    title: 'Awards & Recognition',
+    subtitle:
+      'Official award letters, certificates, and recognition received by Hinnavaru Blue Initiative.',
+    heroImage:
+      'https://d64gsuwffb70l.cloudfront.net/6a275e85a0ba2d9edb470fe3_1780965118488_5a4fb952.jpg',
   });
   const categories = getSiteArray<string>(content, 'achievement_categories', ACHIEVEMENT_CATEGORIES);
   const categoryOptions = ['All', ...categories];
   const featuredStats = items.slice(0, 4);
 
-  const filtered = useMemo(() => items.filter((a) => cat === 'All' || a.category === cat), [items, cat]);
+  const toggleExpanded = (id: string) => {
+    setExpanded((current) => ({
+      ...current,
+      [id]: !current[id],
+    }));
+  };
+
+  const getSummary = (text?: string, isExpanded?: boolean) => {
+    if (!text) return '';
+    if (isExpanded || text.length <= 170) return text;
+    return `${text.slice(0, 170).trim()}...`;
+  };
 
   return (
     <div className="bg-[#F0FCFC]">
@@ -42,8 +62,20 @@ export default function Achievements() {
               <div className="font-poppins font-extrabold text-2xl text-[#68E0D6]">{achievement.metric_value}</div>
               <div className="text-xs text-sky-100 mt-1">{achievement.metric_label}</div>
             </div>
-          ))}
+          ) : (
+            <div className="rounded-[2rem] border border-[#68E0D6]/25 bg-white/80 p-10 text-center">
+              <Award className="h-12 w-12 text-[#00B7E5] mx-auto" />
+              <h3 className="mt-4 font-poppins font-bold text-xl text-[#003A70]">
+                No awards published yet
+              </h3>
+              <p className="mt-2 text-slate-500">
+                Award letters and certificates will appear here once they are added
+                in Supabase with the category set to “Awards”.
+              </p>
+            </div>
+          )}
         </div>
+      </section>
 
         <div className="flex flex-wrap gap-2 mb-10 justify-center">
           {categoryOptions.map((category) => (
@@ -83,7 +115,8 @@ export default function Achievements() {
             ))}
           </div>
         </div>
-      </section>
+      )}
     </div>
   );
 }
+
