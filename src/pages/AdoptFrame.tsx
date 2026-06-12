@@ -46,6 +46,12 @@ const ADOPT_DEFAULTS = {
 
 const WHATSAPP_URL = 'https://wa.me/9607714340';
 
+const formatMvrAmount = (amount?: number | null) =>
+  `MVR ${Number(amount ?? 0).toLocaleString('en-US')}`;
+
+const isMostPopularPackage = (frame: Frame) =>
+  frame.frame_code.trim().toLowerCase() === 'reef guardian';
+
 export default function AdoptFrame() {
   const formRef = useRef<HTMLDivElement | null>(null);
 
@@ -80,7 +86,7 @@ export default function AdoptFrame() {
     const { data, error } = await supabase
       .from('frames')
       .select('*')
-      .order('frame_code');
+      .order('donation_amount', { ascending: true });
 
     console.log('Frames result:', data);
     console.error('Frames error:', error);
@@ -196,7 +202,7 @@ export default function AdoptFrame() {
   );
 
   return (
-    <div className="bg-[#FFFDF7]">
+    <div className="bg-[#F0FCFC]">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
@@ -204,7 +210,7 @@ export default function AdoptFrame() {
           {steps.map((step, index) => (
             <div
               key={step.t}
-              className="rounded-3xl bg-white p-6 shadow-sm border border-sky-50"
+              className="rounded-3xl bg-white p-6 shadow-sm border border-[#CDEFEF]"
             >
               <div className="h-10 w-10 rounded-full bg-[#0066B3] text-white flex items-center justify-center font-bold">
                 {index + 1}
@@ -228,11 +234,11 @@ export default function AdoptFrame() {
             </span>
 
             <h2 className="mt-2 font-poppins font-bold text-3xl text-[#003A70]">
-              Choose a frame to support
+              Choose an adoption package
             </h2>
 
             <p className="mt-3 text-slate-600 max-w-2xl">
-              Select a coral frame below and the adoption form will open for that frame.
+              Select a one-time coral frame contribution package below and the adoption form will open for that package.
             </p>
           </div>
 
@@ -248,21 +254,29 @@ export default function AdoptFrame() {
         </div>
 
         {frames.length > 0 ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {frames.map((frame) => {
-              const canAdopt =
-                frame.status === 'available' || frame.status === 'reserved';
+              const status = frame.status.toLowerCase();
+              const canAdopt = status === 'available' || status === 'reserved';
 
               return (
                 <article
                   key={frame.id}
-                  className={`rounded-3xl overflow-hidden bg-white border shadow-sm transition ${
+                  className={`relative rounded-3xl overflow-hidden bg-white border shadow-sm transition ${
                     selected?.id === frame.id
                       ? 'border-[#00B7E5] ring-2 ring-[#68E0D6]/50'
-                      : 'border-sky-50 hover:-translate-y-1'
+                      : isMostPopularPackage(frame)
+                      ? 'border-[#00B7E5] shadow-lg hover:-translate-y-1'
+                      : 'border-[#CDEFEF] hover:-translate-y-1'
                   }`}
                 >
-                  <div className="relative h-44 bg-sky-50 overflow-hidden">
+                  {isMostPopularPackage(frame) && (
+                    <div className="absolute right-4 top-4 z-10 rounded-full bg-gradient-to-r from-[#68E0D6] to-[#F5E7B2] px-3 py-1 text-xs font-bold text-[#003A70] shadow">
+                      Most Popular
+                    </div>
+                  )}
+
+                  <div className="relative h-44 bg-[#E8F8F7] overflow-hidden">
                     {frame.photo ? (
                       <img
                         src={frame.photo}
@@ -277,9 +291,9 @@ export default function AdoptFrame() {
 
                     <span
                       className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold capitalize ${
-                        frame.status === 'available'
+                        status === 'available'
                           ? 'bg-[#4E9B47] text-white'
-                          : frame.status === 'adopted'
+                          : status === 'adopted'
                           ? 'bg-[#003A70] text-white'
                           : 'bg-white/90 text-[#003A70]'
                       }`}
@@ -306,16 +320,14 @@ export default function AdoptFrame() {
                       </p>
                     )}
 
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className="text-xs text-slate-500">
-                        Donation
-                      </span>
+                    <div className="mt-5 rounded-2xl bg-[#E8F8F7] p-4 text-center">
+                      <div className="font-poppins text-3xl font-extrabold text-[#0066B3]">
+                        {formatMvrAmount(frame.donation_amount)}
+                      </div>
 
-                      <span className="font-bold text-[#0066B3]">
-                        {frame.donation_amount
-                          ? `$${frame.donation_amount}`
-                          : 'Contact us'}
-                      </span>
+                      <p className="mt-1 text-xs font-semibold tracking-wide text-slate-500">
+                        one-time contribution
+                      </p>
                     </div>
 
                     <button
@@ -324,7 +336,7 @@ export default function AdoptFrame() {
                       onClick={() => selectFrame(frame)}
                       className="mt-4 w-full rounded-full py-2.5 font-semibold text-white bg-gradient-to-r from-[#0066B3] to-[#00B7E5] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition"
                     >
-                      {canAdopt ? 'Adopt This Frame' : 'Not Available'}
+                      {`Choose ${frame.frame_code}`}
                     </button>
                   </div>
                 </article>
@@ -332,7 +344,7 @@ export default function AdoptFrame() {
             })}
           </div>
         ) : (
-          <div className="rounded-3xl bg-white border border-sky-50 p-10 text-center">
+          <div className="rounded-3xl bg-white border border-[#CDEFEF] p-10 text-center">
             <p className="text-slate-500">
               Coral frames will appear here once they are added in Supabase.
             </p>
@@ -342,7 +354,7 @@ export default function AdoptFrame() {
 
       {/* Adoption Form */}
       <section ref={formRef} className="max-w-4xl mx-auto px-4 sm:px-6 pb-20">
-        <div className="rounded-[2rem] bg-white shadow-md border border-sky-50 overflow-hidden">
+        <div className="rounded-[2rem] bg-white shadow-md border border-[#CDEFEF] overflow-hidden">
           <div className="bg-gradient-to-r from-[#003A70] to-[#0066B3] p-6 text-white">
             <div className="flex items-center gap-3">
               <Heart className="h-6 w-6 text-[#68E0D6]" />
@@ -493,9 +505,9 @@ export default function AdoptFrame() {
                 </label>
 
                 {selected && (
-                  <div className="rounded-2xl bg-sky-50 p-4 flex items-center justify-between text-sm">
+                  <div className="rounded-2xl bg-[#E8F8F7] p-4 flex items-center justify-between text-sm">
                     <span className="text-slate-600">
-                      Selected frame
+                      Selected package
                     </span>
 
                     <span className="font-bold text-[#0066B3]">
@@ -518,7 +530,7 @@ export default function AdoptFrame() {
       </section>
 
       {progress.length > 0 && (
-        <section className="bg-white py-16">
+        <section className="bg-[#E8F8F7] py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-center gap-2 mb-6">
               <Camera className="h-6 w-6 text-[#00B7E5]" />
@@ -531,7 +543,7 @@ export default function AdoptFrame() {
               {progress.map((item) => (
                 <div
                   key={item.id}
-                  className="rounded-2xl overflow-hidden bg-[#f7fbfe] border border-sky-50"
+                  className="rounded-2xl overflow-hidden bg-[#FAFFFF] border border-[#CDEFEF]"
                 >
                   {item.photo && (
                     <img

@@ -183,7 +183,7 @@ export default function ProjectDetails() {
   }
 
   return (
-    <div>
+    <div className="bg-[#F0FCFC]">
       <section className="relative h-[55vh] min-h-[360px] flex items-end overflow-hidden">
         {project.cover_image && (
           <img
@@ -317,8 +317,8 @@ export default function ProjectDetails() {
       </div>
 
       {related.length > 0 && (
-        <section className="bg-white py-16">
-          <Wave className="w-full h-10 -mt-16" color="#ffffff" />
+        <section className="bg-[#E8F8F7] py-16">
+          <Wave className="w-full h-10 -mt-16" color="#E8F8F7" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <h2 className="font-poppins font-bold text-2xl text-[#003A70] mb-8">
