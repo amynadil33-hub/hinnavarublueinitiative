@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Waves } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { PageHero } from '@/components/PageHero';
 import { ProjectCard } from '@/components/ProjectCard';
-import { PROJECT_CATEGORIES } from '@/lib/constants';
+import { Wave } from '@/components/Wave';
+import { PROJECT_CATEGORIES, normalizeProjectCategory } from '@/lib/constants';
 import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
 import type { Project } from '@/lib/types';
 
@@ -29,14 +29,25 @@ export default function Projects() {
       });
   }, []);
 
-  const page = getSiteObject(content, 'projects_page', { title: 'Our Projects', subtitle: 'Conservation in action across Hinnavaru and Lhaviyani Atoll' });
-  const categories = getSiteArray<string>(content, 'project_categories', PROJECT_CATEGORIES);
+  const page = getSiteObject(content, 'projects_page', {
+    title: 'Our Conservation Work',
+    subtitle:
+      'Explore coral restoration and island-led initiatives protecting the reefs, shores, and community life of Lh. Hinnavaru.',
+    heroImage: '/images/hinnavaru-hero.png',
+  });
+
+  const categories = useMemo(() => {
+    const siteCategories = getSiteArray<string>(content, 'project_categories', []);
+    const normalized = siteCategories.map(normalizeProjectCategory);
+
+    return Array.from(new Set([...PROJECT_CATEGORIES, ...normalized]));
+  }, [content]);
 
   const filtered = useMemo(
     () =>
       projects.filter(
         (p) =>
-          (cat === 'All' || p.category === cat) &&
+          (cat === 'All' || normalizeProjectCategory(p.category) === cat) &&
           (p.title.toLowerCase().includes(q.toLowerCase()) ||
             (p.description || '').toLowerCase().includes(q.toLowerCase())),
       ),
@@ -47,7 +58,48 @@ export default function Projects() {
 
   return (
     <div>
-      <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
+      <section className="relative overflow-hidden bg-[#003A70]">
+        <div className="relative min-h-[430px] flex items-center overflow-hidden">
+          <img
+            src={page.heroImage || '/images/hinnavaru-hero.png'}
+            alt="Maldives lagoon and reef conservation work"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#002B4F]/90 via-[#0066B3]/72 to-[#00B7E5]/45" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#f7fbfe] via-[#f7fbfe]/30 to-transparent" />
+          <div className="absolute -left-16 top-16 h-56 w-56 rounded-full bg-[#68E0D6]/20 blur-3xl" />
+          <div className="absolute right-10 bottom-12 h-64 w-64 rounded-full bg-[#F5E7B2]/20 blur-3xl" />
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-24">
+            <div className="max-w-3xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-1.5 text-sm font-semibold text-[#B9FFF7] backdrop-blur">
+                <Waves className="h-4 w-4" />
+                HBI CONSERVATION PROJECTS
+              </span>
+
+              <h1 className="mt-6 font-poppins font-extrabold text-4xl sm:text-6xl text-white leading-tight drop-shadow-lg">
+                {page.title}
+              </h1>
+
+              <p className="mt-5 max-w-2xl text-base sm:text-xl leading-relaxed text-sky-100">
+                {page.subtitle}
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {PROJECT_CATEGORIES.map((category) => (
+                  <span
+                    key={category}
+                    className="rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-semibold text-white backdrop-blur"
+                  >
+                    {category}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        <Wave className="block w-full h-12 -mt-1" color="#f7fbfe" />
+      </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         {featured.length > 0 && (

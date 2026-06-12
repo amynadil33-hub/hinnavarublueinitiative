@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
-import { CRM_SUBSCRIBE } from '@/lib/constants';
+import { CRM_ENDPOINT } from '@/lib/constants';
 import { fetchSiteContent, getSiteObject } from '@/lib/siteContent';
 
 const CONTACT_DEFAULTS = {
@@ -102,8 +102,8 @@ export default function Contact() {
     }
 
     try {
-      if (CRM_SUBSCRIBE) {
-        await fetch(CRM_SUBSCRIBE, {
+      if (CRM_ENDPOINT) {
+        await fetch(CRM_ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -117,7 +117,7 @@ export default function Contact() {
         });
       }
     } catch (crmError) {
-      console.error('CRM subscribe error:', crmError);
+      console.error('CRM sync error:', crmError);
     }
 
     setSubmitting(false);
