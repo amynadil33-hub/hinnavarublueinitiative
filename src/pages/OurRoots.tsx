@@ -45,7 +45,7 @@ export default function OurRoots() {
   ]);
 
   return (
-    <div>
+    <div className="bg-[#F0FCFC]">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid lg:grid-cols-2 gap-12 items-center">
@@ -62,7 +62,7 @@ export default function OurRoots() {
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-[#E8F8F7] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-6">
           <div className="rounded-3xl p-8 bg-gradient-to-br from-[#0066B3] to-[#00B7E5] text-white">
             <Compass className="h-8 w-8 text-[#68E0D6]" />
@@ -91,8 +91,8 @@ export default function OurRoots() {
             const icons = [Anchor, Fish, Leaf, Users];
             const Icon = icons[i] || Anchor;
             return (
-              <div key={v.title} className="rounded-2xl bg-white p-6 shadow-sm border border-sky-50 text-center">
-                <div className="mx-auto h-12 w-12 rounded-xl bg-sky-50 flex items-center justify-center text-[#0066B3]">
+              <div key={v.title} className="rounded-2xl bg-white p-6 shadow-sm border border-[#CDEFEF] text-center">
+                <div className="mx-auto h-12 w-12 rounded-xl bg-[#E8F8F7] flex items-center justify-center text-[#0066B3]">
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="mt-4 font-poppins font-bold text-[#003A70]">{v.title}</h3>
@@ -103,7 +103,7 @@ export default function OurRoots() {
         </div>
       </section>
 
-      <section className="bg-white py-16">
+      <section className="bg-[#E8F8F7] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-3 gap-8">
           {featureBlocks.map((b, i) => {
             const icons = [Heart, Users, Fish];

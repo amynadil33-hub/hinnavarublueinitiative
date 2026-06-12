@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Calendar } from 'lucide-react';
+import { normalizeProjectCategory } from '@/lib/constants';
 import type { Project } from '@/lib/types';
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       to={`/projects/${project.slug}`}
-      className="group block rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all border border-sky-50"
+      className="group block rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all border border-[#CDEFEF]"
     >
       <div className="relative h-52 overflow-hidden">
         <img
@@ -15,7 +16,7 @@ export function ProjectCard({ project }: { project: Project }) {
           className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold bg-white/90 text-[#0066B3]">
-          {project.category}
+          {normalizeProjectCategory(project.category)}
         </span>
         {project.status && (
           <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-[#4E9B47]/90 text-white">
