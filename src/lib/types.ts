@@ -14,6 +14,7 @@ export interface Project {
   status?: string;
   location?: string;
   project_date?: string;
+  sort_order?: number | null;
   featured?: boolean;
   published?: boolean;
 }

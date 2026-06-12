@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, Waves } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { ProjectCard } from '@/components/ProjectCard';
@@ -20,6 +21,7 @@ export default function Projects() {
       .from('projects')
       .select('*')
       .eq('published', true)
+      .order('sort_order', { ascending: true })
       .order('project_date', { ascending: false })
       .then(({ data, error }) => {
         console.log('Supabase result:', data);
@@ -109,9 +111,14 @@ export default function Projects() {
               <span className="text-[#00B7E5] font-semibold text-sm">FEATURED PROJECT</span>
               <h2 className="mt-2 font-poppins font-bold text-2xl text-[#003A70]">{featured[0].title}</h2>
               <p className="mt-3 text-slate-600">{featured[0].description}</p>
-              <a href={`/projects/${featured[0].slug}`} className="mt-5 inline-block w-fit px-5 py-2.5 rounded-full bg-[#0066B3] text-white text-sm font-semibold hover:bg-[#003A70] transition">
-                View Project
-              </a>
+              {featured[0].slug && (
+                <Link
+                  to={`/projects/${featured[0].slug}`}
+                  className="mt-5 inline-block w-fit px-5 py-2.5 rounded-full bg-[#0066B3] text-white text-sm font-semibold hover:bg-[#003A70] transition"
+                >
+                  View Project
+                </Link>
+              )}
             </div>
           </div>
         )}
