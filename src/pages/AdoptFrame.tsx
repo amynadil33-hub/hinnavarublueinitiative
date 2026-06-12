@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
-import { CRM_SUBSCRIBE } from '@/lib/constants';
+import { CRM_ENDPOINT } from '@/lib/constants';
 import { fetchSiteContent, getSiteArray, getSiteObject } from '@/lib/siteContent';
 import type { Frame, FrameProgress } from '@/lib/types';
 
@@ -155,8 +155,8 @@ export default function AdoptFrame() {
     }
 
     try {
-      if (CRM_SUBSCRIBE) {
-        await fetch(CRM_SUBSCRIBE, {
+      if (CRM_ENDPOINT) {
+        await fetch(CRM_ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -170,7 +170,7 @@ export default function AdoptFrame() {
         });
       }
     } catch (crmError) {
-      console.error('CRM subscribe error:', crmError);
+      console.error('CRM sync error:', crmError);
     }
 
     setSubmitting(false);

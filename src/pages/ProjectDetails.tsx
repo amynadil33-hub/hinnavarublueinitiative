@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MapPin, Calendar, ArrowLeft } from 'lucide-react';
+import { MapPin, Calendar, ArrowLeft, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Wave } from '@/components/Wave';
 import { ProjectCard } from '@/components/ProjectCard';
+import { normalizeProjectCategory } from '@/lib/constants';
 import type { Project } from '@/lib/types';
 
 type ProjectGalleryItem = {
@@ -44,11 +45,28 @@ export default function ProjectDetails() {
   const [gallery, setGallery] = useState<ProjectGalleryItem[]>([]);
   const [videos, setVideos] = useState<ProjectVideoItem[]>([]);
   const [metrics, setMetrics] = useState<ProjectMetricItem[]>([]);
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   const isUrlVideo = (url: string) => /\.(mp4|webm|mov)$/i.test(url);
+  const lightboxItem = lightboxIndex === null ? null : gallery[lightboxIndex];
+
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const showPreviousImage = useCallback(() => {
+    if (gallery.length === 0) return;
+
+    setLightboxIndex((current) =>
+      current === null ? null : (current - 1 + gallery.length) % gallery.length,
+    );
+  }, [gallery.length]);
+  const showNextImage = useCallback(() => {
+    if (gallery.length === 0) return;
+
+    setLightboxIndex((current) =>
+      current === null ? null : (current + 1) % gallery.length,
+    );
+  }, [gallery.length]);
 
   useEffect(() => {
     if (!slug) return;
@@ -131,6 +149,24 @@ export default function ProjectDetails() {
     loadProject();
   }, [slug]);
 
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowLeft') showPreviousImage();
+      if (event.key === 'ArrowRight') showNextImage();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [closeLightbox, lightboxIndex, showNextImage, showPreviousImage]);
+
   if (loading) {
     return <div className="py-32 text-center text-slate-400">Loading...</div>;
   }
@@ -165,7 +201,7 @@ export default function ProjectDetails() {
           </Link>
 
           <span className="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold backdrop-blur">
-            {project.category}
+            {normalizeProjectCategory(project.category)}
           </span>
 
           <h1 className="mt-3 font-poppins font-extrabold text-3xl sm:text-5xl text-white">
@@ -237,12 +273,12 @@ export default function ProjectDetails() {
             </h2>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {gallery.map((item) => (
+              {gallery.map((item, index) => (
                 <img
                   key={item.id}
                   src={item.image_url}
                   alt={item.caption || project.title}
-                  onClick={() => setLightbox(item.image_url)}
+                  onClick={() => setLightboxIndex(index)}
                   className="rounded-xl h-44 w-full object-cover cursor-pointer hover:opacity-90 transition"
                 />
               ))}
@@ -298,12 +334,66 @@ export default function ProjectDetails() {
         </section>
       )}
 
-      {lightbox && (
+      {lightboxItem && (
         <div
-          onClick={() => setLightbox(null)}
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Project gallery image viewer"
+          onClick={closeLightbox}
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
         >
-          <img src={lightbox} alt="" className="max-h-[90vh] max-w-full rounded-lg" />
+          <button
+            type="button"
+            onClick={closeLightbox}
+            className="absolute right-4 top-4 rounded-full bg-white/10 p-3 text-white hover:bg-white/20 transition"
+            aria-label="Close gallery image viewer"
+          >
+            <X className="h-6 w-6" />
+          </button>
+
+          {gallery.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  showPreviousImage();
+                }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20 transition"
+                aria-label="Show previous gallery image"
+              >
+                <ChevronLeft className="h-7 w-7" />
+              </button>
+
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  showNextImage();
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20 transition"
+                aria-label="Show next gallery image"
+              >
+                <ChevronRight className="h-7 w-7" />
+              </button>
+            </>
+          )}
+
+          <figure
+            onClick={(event) => event.stopPropagation()}
+            className="max-w-6xl w-full flex flex-col items-center gap-4"
+          >
+            <img
+              src={lightboxItem.image_url}
+              alt={lightboxItem.caption || project.title}
+              className="max-h-[82vh] max-w-full rounded-2xl object-contain shadow-2xl"
+            />
+            {lightboxItem.caption && (
+              <figcaption className="max-w-3xl rounded-full bg-white/10 px-5 py-2 text-center text-sm text-sky-50 backdrop-blur">
+                {lightboxItem.caption}
+              </figcaption>
+            )}
+          </figure>
         </div>
       )}
     </div>

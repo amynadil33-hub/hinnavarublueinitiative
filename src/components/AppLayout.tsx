@@ -9,12 +9,14 @@ import AdoptFrame from '@/pages/AdoptFrame';
 import Contact from '@/pages/Contact';
 import Admin from '@/pages/Admin';
 import NotFound from '@/pages/NotFound';
+import ScrollToTop from '@/components/ScrollToTop';
 
 // Full Hinnavaru Blue Initiative app: ocean-inspired NGO site with
 // dynamic Supabase content, coral frame adoption and admin dashboard.
 export default function AppLayout() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/admin" element={<Admin />} />
         <Route element={<Layout />}>

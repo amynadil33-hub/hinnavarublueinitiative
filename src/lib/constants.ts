@@ -9,16 +9,23 @@ export const COLORS = {
 
 export const LOGO_URL = '/images/logo.png';
 
-export const CRM_SUBSCRIBE =
+export const CRM_ENDPOINT =
   'https://famous.ai/api/crm/6a275e85a0ba2d9edb470fe3/subscribe';
 
 export const PROJECT_CATEGORIES = [
   'Coral Restoration',
-  'Island Sweep',
-  'Community Awareness',
-  'Research',
-  'Partnerships',
-];
+  'Island Sweep & Initiatives',
+] as const;
+
+export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
+
+export function normalizeProjectCategory(category?: string | null): ProjectCategory {
+  if (!category || category === 'Coral Restoration' || category === 'Research') {
+    return 'Coral Restoration';
+  }
+
+  return 'Island Sweep & Initiatives';
+}
 
 export const ACHIEVEMENT_CATEGORIES = [
   'Coral Restoration',
