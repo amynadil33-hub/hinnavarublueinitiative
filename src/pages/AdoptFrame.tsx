@@ -202,7 +202,7 @@ export default function AdoptFrame() {
   );
 
   return (
-    <div className="bg-[#FFFDF7]">
+    <div className="bg-[#F0FCFC]">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
@@ -210,7 +210,7 @@ export default function AdoptFrame() {
           {steps.map((step, index) => (
             <div
               key={step.t}
-              className="rounded-3xl bg-white p-6 shadow-sm border border-sky-50"
+              className="rounded-3xl bg-white p-6 shadow-sm border border-[#CDEFEF]"
             >
               <div className="h-10 w-10 rounded-full bg-[#0066B3] text-white flex items-center justify-center font-bold">
                 {index + 1}
@@ -267,7 +267,7 @@ export default function AdoptFrame() {
                       ? 'border-[#00B7E5] ring-2 ring-[#68E0D6]/50'
                       : isMostPopularPackage(frame)
                       ? 'border-[#00B7E5] shadow-lg hover:-translate-y-1'
-                      : 'border-sky-50 hover:-translate-y-1'
+                      : 'border-[#CDEFEF] hover:-translate-y-1'
                   }`}
                 >
                   {isMostPopularPackage(frame) && (
@@ -276,7 +276,7 @@ export default function AdoptFrame() {
                     </div>
                   )}
 
-                  <div className="relative h-44 bg-sky-50 overflow-hidden">
+                  <div className="relative h-44 bg-[#E8F8F7] overflow-hidden">
                     {frame.photo ? (
                       <img
                         src={frame.photo}
@@ -320,7 +320,7 @@ export default function AdoptFrame() {
                       </p>
                     )}
 
-                    <div className="mt-5 rounded-2xl bg-sky-50 p-4 text-center">
+                    <div className="mt-5 rounded-2xl bg-[#E8F8F7] p-4 text-center">
                       <div className="font-poppins text-3xl font-extrabold text-[#0066B3]">
                         {formatMvrAmount(frame.donation_amount)}
                       </div>
@@ -344,7 +344,7 @@ export default function AdoptFrame() {
             })}
           </div>
         ) : (
-          <div className="rounded-3xl bg-white border border-sky-50 p-10 text-center">
+          <div className="rounded-3xl bg-white border border-[#CDEFEF] p-10 text-center">
             <p className="text-slate-500">
               Coral frames will appear here once they are added in Supabase.
             </p>
@@ -354,7 +354,7 @@ export default function AdoptFrame() {
 
       {/* Adoption Form */}
       <section ref={formRef} className="max-w-4xl mx-auto px-4 sm:px-6 pb-20">
-        <div className="rounded-[2rem] bg-white shadow-md border border-sky-50 overflow-hidden">
+        <div className="rounded-[2rem] bg-white shadow-md border border-[#CDEFEF] overflow-hidden">
           <div className="bg-gradient-to-r from-[#003A70] to-[#0066B3] p-6 text-white">
             <div className="flex items-center gap-3">
               <Heart className="h-6 w-6 text-[#68E0D6]" />
@@ -505,7 +505,7 @@ export default function AdoptFrame() {
                 </label>
 
                 {selected && (
-                  <div className="rounded-2xl bg-sky-50 p-4 flex items-center justify-between text-sm">
+                  <div className="rounded-2xl bg-[#E8F8F7] p-4 flex items-center justify-between text-sm">
                     <span className="text-slate-600">
                       Selected package
                     </span>
@@ -530,7 +530,7 @@ export default function AdoptFrame() {
       </section>
 
       {progress.length > 0 && (
-        <section className="bg-white py-16">
+        <section className="bg-[#E8F8F7] py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-center gap-2 mb-6">
               <Camera className="h-6 w-6 text-[#00B7E5]" />
@@ -543,7 +543,7 @@ export default function AdoptFrame() {
               {progress.map((item) => (
                 <div
                   key={item.id}
-                  className="rounded-2xl overflow-hidden bg-[#f7fbfe] border border-sky-50"
+                  className="rounded-2xl overflow-hidden bg-[#FAFFFF] border border-[#CDEFEF]"
                 >
                   {item.photo && (
                     <img

@@ -57,7 +57,7 @@ export default function Projects() {
   const featured = projects.filter((p) => p.featured).slice(0, 1);
 
   return (
-    <div>
+    <div className="bg-[#F0FCFC]">
       <section className="relative overflow-hidden bg-[#003A70]">
         <div className="relative min-h-[430px] flex items-center overflow-hidden">
           <img
@@ -66,7 +66,7 @@ export default function Projects() {
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-[#002B4F]/90 via-[#0066B3]/72 to-[#00B7E5]/45" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#f7fbfe] via-[#f7fbfe]/30 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#F0FCFC] via-[#E8F8F7]/40 to-transparent" />
           <div className="absolute -left-16 top-16 h-56 w-56 rounded-full bg-[#68E0D6]/20 blur-3xl" />
           <div className="absolute right-10 bottom-12 h-64 w-64 rounded-full bg-[#F5E7B2]/20 blur-3xl" />
 
@@ -98,12 +98,12 @@ export default function Projects() {
             </div>
           </div>
         </div>
-        <Wave className="block w-full h-12 -mt-1" color="#f7fbfe" />
+        <Wave className="block w-full h-12 -mt-1" color="#F0FCFC" />
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         {featured.length > 0 && (
-          <div className="mb-12 rounded-3xl overflow-hidden grid lg:grid-cols-2 bg-white shadow-md border border-sky-50">
+          <div className="mb-12 rounded-3xl overflow-hidden grid lg:grid-cols-2 bg-white shadow-md border border-[#CDEFEF]">
             <img src={featured[0].cover_image} alt={featured[0].title} className="h-64 lg:h-full w-full object-cover" />
             <div className="p-8 flex flex-col justify-center">
               <span className="text-[#00B7E5] font-semibold text-sm">FEATURED PROJECT</span>
@@ -123,7 +123,7 @@ export default function Projects() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search projects..."
-              className="w-full pl-10 pr-4 py-3 rounded-full border border-sky-100 outline-none focus:ring-2 focus:ring-[#00B7E5] bg-white"
+              className="w-full pl-10 pr-4 py-3 rounded-full border border-[#CDEFEF] outline-none focus:ring-2 focus:ring-[#00B7E5] bg-white"
             />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -132,7 +132,7 @@ export default function Projects() {
                 key={c}
                 onClick={() => setCat(c)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                  cat === c ? 'bg-[#0066B3] text-white' : 'bg-white text-slate-600 border border-sky-100 hover:bg-sky-50'
+                  cat === c ? 'bg-[#0066B3] text-white' : 'bg-white text-slate-600 border border-[#CDEFEF] hover:bg-[#E8F8F7]'
                 }`}
               >
                 {c}
