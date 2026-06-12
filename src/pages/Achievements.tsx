@@ -49,7 +49,7 @@ export default function Achievements() {
   };
 
   return (
-    <div className="bg-[#FFFDF7] min-h-screen">
+    <div className="bg-[#F0FCFC] min-h-screen">
       <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
 
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16">
@@ -60,7 +60,7 @@ export default function Achievements() {
           <div className="max-w-3xl mb-12">
             <span className="inline-flex items-center gap-2 text-[#008EB3] font-semibold tracking-wide">
               <Award className="h-4 w-4" />
-              AWARDS ONLY
+              AWARDS & CERTIFICATES
             </span>
 
             <h2 className="mt-3 font-poppins font-bold text-3xl sm:text-5xl text-[#003A70] leading-tight">
@@ -89,7 +89,9 @@ export default function Achievements() {
                   >
                     <button
                       type="button"
-                      onClick={() => award.image && setActiveImage(award)}
+                      onClick={() => {
+                        if (award.image) setActiveImage(award);
+                      }}
                       disabled={!award.image}
                       className="relative block w-full h-72 overflow-hidden bg-gradient-to-br from-[#EFFFFD] to-[#F7FBFE] text-left"
                     >
@@ -190,7 +192,7 @@ export default function Achievements() {
             onClick={(event) => event.stopPropagation()}
           >
             <img
-              src={activeImage.image}
+              src={activeImage.image || ''}
               alt={activeImage.title}
               className="max-h-[82vh] w-full object-contain rounded-xl shadow-2xl bg-white"
             />
@@ -212,4 +214,3 @@ export default function Achievements() {
     </div>
   );
 }
-
