@@ -27,9 +27,8 @@ icon: Waves,
 eyebrow: 'COMMUNITY CONSERVATION',
 title: 'The Hinnavaru Blue Initiative: A Catalyst for Community-Led Conservation',
 paragraphs: [
-'The turning point for local environmental consciousness arrived in 2004. In the devastating wake of the Indian Ocean tsunami, a fundamental truth was laid bare: the survival and prosperity of our island are inextricably linked to the health of our coral reefs.',
-'In the ensuing years, anthropogenic pressures and climate shifts began to alter the marine ecosystem. Local fishers were the first to witness these subtle disruptions, sounding an alarm that resonated across the entire community. What emerged from this collective realization was a paradigm shift—moving away from mere extraction toward a dedicated commitment to restoration, protection, and climate resilience.',
-'From this grassroots awakening, the Hinnavaru Blue Initiative was born: a community-driven model of marine conservation rooted in ancestral responsibility and localized environmental stewardship.',
+'The Hinnavaru Blue Initiative was born from a fundamental truth: the survival and prosperity of our island are inextricably linked to the health of our coral reefs.',
+'From this realization emerged a community-driven model of marine conservation rooted in ancestral responsibility and localized environmental stewardship, woven by the sons and daughters of the sea.',
 ],
 },
 {
@@ -129,9 +128,10 @@ return ( <div className="min-h-screen bg-[#DDF7F7]"> <PageHero title={page.title
           return (
             <article
               key={section.title}
-              className={`grid lg:grid-cols-[0.32fr_0.68fr] gap-8 rounded-[2rem] border border-[#B7E6E5] bg-white/85 backdrop-blur p-6 sm:p-8 shadow-sm ${
-                index === 1 ? 'lg:grid-cols-[0.68fr_0.32fr]' : ''
-              }`}
+              className={
+                'grid gap-8 rounded-[2rem] border border-[#B7E6E5] bg-white/85 backdrop-blur p-6 sm:p-8 shadow-sm lg:grid-cols-[0.32fr_0.68fr] ' +
+                (index === 1 ? 'lg:grid-cols-[0.68fr_0.32fr]' : '')
+              }
             >
               <div className={index === 1 ? 'lg:order-2' : ''}>
                 <div className="h-14 w-14 rounded-2xl bg-[#E8F8F7] flex items-center justify-center text-[#0066B3]">
