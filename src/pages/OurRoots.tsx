@@ -76,8 +76,6 @@ fetchSiteContent(['our_roots_page']).then(setContent);
 const page = getSiteObject(content, 'our_roots_page', ROOTS_DEFAULTS);
 
 return ( <div className="min-h-screen bg-[#DDF7F7]"> <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
-
-```
   <section className="relative overflow-hidden py-20">
     <div className="absolute -left-24 top-20 h-80 w-80 rounded-full bg-[#68E0D6]/30 blur-3xl" />
     <div className="absolute right-0 bottom-20 h-96 w-96 rounded-full bg-[#BFEAE9]/50 blur-3xl" />

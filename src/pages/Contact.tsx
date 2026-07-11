@@ -11,7 +11,6 @@ AlertCircle,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { PageHero } from '@/components/PageHero';
-import { CRM_ENDPOINT } from '@/lib/constants';
 import { fetchSiteContent, getSiteObject } from '@/lib/siteContent';
 
 const CONTACT_DEFAULTS = {
@@ -35,7 +34,7 @@ office: 'Neeth, Lh. Hinnavaru, Maldives',
 phone: '+960 7714340',
 phoneHref: 'tel:+9607714340',
 whatsapp: 'https://wa.me/9607714340',
-email: '[coral@hinnavarublue.org](mailto:coral@hinnavarublue.org)',
+email: 'coral@hinnavarublue.org',
 };
 
 export default function Contact() {
@@ -45,7 +44,6 @@ email: '',
 phone: '',
 subject: '',
 message: '',
-sms_opt_in: true,
 });
 
 const [sent, setSent] = useState(false);
@@ -72,7 +70,6 @@ const contactDetails = HBI_CONTACT;
 const submit = async (e: React.FormEvent<HTMLFormElement>) => {
 e.preventDefault();
 
-```
 setSubmitting(true);
 setErrorMessage('');
 setSent(false);
@@ -92,9 +89,8 @@ const { error } = await supabase
   .from('contact_messages')
   .insert([payload]);
 
-console.error('Contact insert error:', error);
-
 if (error) {
+  console.error('Contact insert error:', error);
   setSubmitting(false);
   setErrorMessage(`Message could not be sent: ${error.message}`);
   return;
@@ -123,25 +119,6 @@ try {
   console.error('Contact email request failed:', emailError);
 }
 
-try {
-  if (CRM_ENDPOINT) {
-    await fetch(CRM_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: form.email.trim(),
-        name: form.name.trim(),
-        phone: form.phone.trim() || undefined,
-        sms_opt_in: form.sms_opt_in,
-        source: 'contact-form',
-        tags: ['contact'],
-      }),
-    });
-  }
-} catch (crmError) {
-  console.error('CRM sync error:', crmError);
-}
-
 setSubmitting(false);
 setSent(true);
 
@@ -151,15 +128,11 @@ setForm({
   phone: '',
   subject: '',
   message: '',
-  sms_opt_in: true,
 });
-```
 
 };
 
 return ( <div className="min-h-screen bg-[#DDF7F7]"> <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
-
-```
   <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid lg:grid-cols-2 gap-12">
     <div>
       <h2 className="font-poppins font-bold text-2xl text-[#003A70]">
@@ -341,21 +314,6 @@ return ( <div className="min-h-screen bg-[#DDF7F7]"> <PageHero title={page.title
             className="input-f w-full"
           />
 
-          <label className="flex items-start gap-2 text-xs text-slate-500">
-            <input
-              type="checkbox"
-              checked={form.sms_opt_in}
-              onChange={(e) =>
-                setForm({ ...form, sms_opt_in: e.target.checked })
-              }
-              className="mt-0.5"
-            />
-
-            <span>
-              Text me updates. Msg &amp; data rates may apply. Reply STOP to unsubscribe.
-            </span>
-          </label>
-
           <button
             type="submit"
             disabled={submitting}
@@ -368,7 +326,5 @@ return ( <div className="min-h-screen bg-[#DDF7F7]"> <PageHero title={page.title
     </div>
   </section>
 </div>
-```
-
 );
 }

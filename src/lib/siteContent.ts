@@ -29,20 +29,28 @@ const normalizeRow = (row: SiteContentRow) => {
 };
 
 export async function fetchSiteContent(keys: string[]) {
-  const { data, error } = await supabase
-    .from('site_content')
-    .select('*')
-    .in('key', keys);
+  try {
+    // Some deployments use `slug` instead of `key`. Selecting the rows and
+    // filtering client-side avoids querying a column that may not exist.
+    const { data, error } = await supabase.from('site_content').select('*');
 
-  console.log('Supabase result:', data);
-  console.error('Supabase error:', error);
+    if (error) {
+      console.warn('Site content is unavailable; using page defaults.', error.message);
+      return {};
+    }
 
-  return ((data || []) as SiteContentRow[]).reduce<SiteContentMap>((acc, row) => {
-    const key = row.key || row.slug;
-    const value = normalizeRow(row);
-    if (key && value !== undefined) acc[key] = value;
-    return acc;
-  }, {});
+    const requestedKeys = new Set(keys);
+
+    return ((data || []) as SiteContentRow[]).reduce<SiteContentMap>((acc, row) => {
+      const key = row.key || row.slug;
+      const value = normalizeRow(row);
+      if (key && requestedKeys.has(key) && value !== undefined) acc[key] = value;
+      return acc;
+    }, {});
+  } catch (error) {
+    console.warn('Site content could not be loaded; using page defaults.', error);
+    return {};
+  }
 }
 
 export function getSiteText(content: SiteContentMap, key: string, fallback = '') {

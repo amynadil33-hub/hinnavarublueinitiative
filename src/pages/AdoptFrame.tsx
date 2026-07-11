@@ -88,12 +88,10 @@ const { data, error } = await supabase
 .select('*')
 .order('donation_amount', { ascending: true });
 
-```
 console.log('Frames result:', data);
 console.error('Frames error:', error);
 
 setFrames(data || []);
-```
 
 };
 
@@ -104,12 +102,10 @@ const { data, error } = await supabase
 .order('progress_date', { ascending: false })
 .limit(6);
 
-```
 console.log('Frame progress result:', data);
 console.error('Frame progress error:', error);
 
 setProgress((data as FrameProgressWithFrame[]) || []);
-```
 
 };
 
@@ -118,21 +114,18 @@ setSelected(frame);
 setSubmitted(false);
 setErrorMessage('');
 
-```
 setTimeout(() => {
   formRef.current?.scrollIntoView({
     behavior: 'smooth',
     block: 'start',
   });
 }, 100);
-```
 
 };
 
 const submit = async (e: FormEvent<HTMLFormElement>) => {
 e.preventDefault();
 
-```
 if (!selected) {
   setErrorMessage('Please choose a coral frame before submitting.');
   return;
@@ -227,7 +220,6 @@ setForm({
   dedication_message: '',
   sms_opt_in: true,
 });
-```
 
 };
 
@@ -239,8 +231,6 @@ page.steps as AdoptStep[]
 );
 
 return ( <div className="min-h-screen bg-[#DDF7F7]"> <PageHero title={page.title} subtitle={page.subtitle} image={page.heroImage} />
-
-```
   <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
     <div className="grid md:grid-cols-3 gap-6 mb-16">
       {steps.map((step, index) => (
@@ -614,7 +604,6 @@ return ( <div className="min-h-screen bg-[#DDF7F7]"> <PageHero title={page.title
     </section>
   )}
 </div>
-```
 
 );
 }
